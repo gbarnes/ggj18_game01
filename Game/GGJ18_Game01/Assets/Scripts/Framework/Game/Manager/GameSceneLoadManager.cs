@@ -42,6 +42,7 @@ namespace Framework.Game.Manager
             }
 
             #region Events
+            Observer.Subscribe(CommandType.GameSession_Start, (Action)Evt_OnHandleGameSessionStart);
             #endregion
         }
 
@@ -51,7 +52,7 @@ namespace Framework.Game.Manager
         private void OnDestroy()
         {
             #region Events
-           
+            Observer.Unsubscribe(CommandType.GameSession_Start, (Action)Evt_OnHandleGameSessionStart);
             #endregion
         }
         #endregion
@@ -111,6 +112,16 @@ namespace Framework.Game.Manager
         #endregion
 
         #region Events
+        /// <summary>
+        /// 
+        /// </summary>
+        private void Evt_OnHandleGameSessionStart()
+        {
+            LoadSceneAsync("Scn_Game", LoadSceneMode.Single, () =>
+            {
+                // do something :)
+            });
+        }
         #endregion
     }
 }
