@@ -1,0 +1,6 @@
+<linker>
+       <assembly fullname="Sirenix.OdinInspector.Attributes" preserve="all" ignoreIfMissing="1"/>
+       <assembly fullname="Sirenix.Serialization.Config" preserve="all" ignoreIfMissing="1"/>
+       <assembly fullname="Sirenix.Serialization" preserve="all" ignoreIfMissing="1"/>
+       <assembly fullname="Sirenix.Utilities" preserve="all" ignoreIfMissing="1"/>
+</linker>
