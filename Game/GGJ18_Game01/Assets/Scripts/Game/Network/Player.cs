@@ -5,6 +5,9 @@ using UnityEngine.Networking;
 
 public class Player : NetworkBehaviour {
 
+    [SyncVar]
+    public bool testVar = false;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -23,8 +26,15 @@ public class Player : NetworkBehaviour {
                 transform.Translate(Time.deltaTime, 0, 0);
             if (Input.GetKey(KeyCode.DownArrow))
                 transform.Translate(0, 0, -Time.deltaTime);
+
+            if (Input.GetKeyDown(KeyCode.T))
+                CmdChangeColor();
         }
+    }
 
-
+    [Command]
+    void CmdChangeColor()
+    {
+        GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 0, 0));
     }
 }
