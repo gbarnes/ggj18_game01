@@ -23,6 +23,8 @@ namespace Framework.Service
         Loading_ReportProgress,
         GameSession_Start,
         GameSession_ChangeState,
+        GameSession_End,
+        GameSession_InitializedServer,
         Save,
         
     }

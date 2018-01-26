@@ -6,12 +6,15 @@ using UnityEngine.Assertions;
 using UnityEngine.UI;
 using System.Linq;
 using Framework.Service;
+using GGJ_G01.Game.States;
 
 namespace Framework.Game.Manager
 {
     public enum GameplayState
     {
-        None
+        None,
+        MainMenu,
+        Game
     }
 
     /// <summary>
@@ -65,7 +68,8 @@ namespace Framework.Game.Manager
             Observer.Subscribe(CommandType.Save, (Action)Evt_OnHandleSaveGame);
 
             //Observer.TriggerDelayed(CommandType.GameSession_Start, 2.0f, null);
-			/*AddState(new DefaultGameState());*/
+			AddState(new MainMenuState());
+            ChangeState(GameplayState.MainMenu);
         }
 
         /// <summary>

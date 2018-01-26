@@ -133,9 +133,9 @@ namespace Framework.Game.Input
             #endregion
 
             #region Mouse Click Logic
-			if(UnityEngine.Input.GetMouseButtonUp(0) && !EventSystem.current.IsPointerOverGameObject()) {
+			/*if(UnityEngine.Input.GetMouseButtonUp(0) && !EventSystem.current.IsPointerOverGameObject()) {
 				InvokeEvent(InputDeviceEventType.MouseClick, UnityEngine.Input.mousePosition);
-			}
+			}*/
             #endregion
         }
 

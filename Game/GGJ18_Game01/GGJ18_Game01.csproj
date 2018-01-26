@@ -13,7 +13,8 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2017.1.1f1</UnityVersion>
@@ -119,8 +120,11 @@
     <Compile Include="Assets\Scripts\Framework\Service\Observer.cs" />
     <Compile Include="Assets\Scripts\Framework\Service\TaskScheduler.cs" />
     <Compile Include="Assets\Scripts\Framework\Utility\DLog.cs" />
+    <Compile Include="Assets\Scripts\Game\Manager\CustomGameNetworkManager.cs" />
     <Compile Include="Assets\Scripts\Game\Network\Player.cs" />
+    <Compile Include="Assets\Scripts\Game\States\MainMenuState.cs" />
     <Compile Include="Assets\Scripts\Game\UI\UILoadingScreenComponent.cs" />
+    <Compile Include="Assets\Scripts\Game\UI\UIMainMenuComponent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Graphics\UI\empty.txt" />
@@ -140,6 +144,7 @@
     <None Include="Assets\Plugins\Sirenix\Readme.txt" />
     <None Include="Assets\Prefabs\empty.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
 </Project>

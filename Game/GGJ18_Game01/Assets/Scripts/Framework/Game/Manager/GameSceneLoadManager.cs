@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System.IO;
 using Framework.Service;
+using UnityEngine.Networking;
 
 namespace Framework.Game.Manager
 {
@@ -42,7 +43,8 @@ namespace Framework.Game.Manager
             }
 
             #region Events
-            Observer.Subscribe(CommandType.GameSession_Start, (Action)Evt_OnHandleGameSessionStart);
+            Observer.Subscribe(CommandType.GameSession_Start, (Action<NetworkConnection, bool>)Evt_OnHandleGameSessionStart);
+            Observer.Subscribe(CommandType.GameSession_End, (Action)Evt_OnHandleGameSessionEnd);
             #endregion
         }
 
@@ -52,7 +54,7 @@ namespace Framework.Game.Manager
         private void OnDestroy()
         {
             #region Events
-            Observer.Unsubscribe(CommandType.GameSession_Start, (Action)Evt_OnHandleGameSessionStart);
+            Observer.Unsubscribe(CommandType.GameSession_Start, (Action<NetworkConnection, bool>)Evt_OnHandleGameSessionStart);
             #endregion
         }
         #endregion
@@ -115,9 +117,28 @@ namespace Framework.Game.Manager
         /// <summary>
         /// 
         /// </summary>
-        private void Evt_OnHandleGameSessionStart()
+        private void Evt_OnHandleGameSessionStart(NetworkConnection conn, bool isServer)
         {
             LoadSceneAsync("Scn_Game", LoadSceneMode.Single, () =>
+            {
+                // do something :)
+                GameObject NewInstanceOfPlayer = Instantiate(NetworkManager.singleton.playerPrefab) as GameObject;
+                NewInstanceOfPlayer.name = "Player01";
+
+                if (isServer)
+                {
+                    NetworkServer.AddPlayerForConnection(conn, NewInstanceOfPlayer, 0);
+                    Observer.Subscribe(CommandType.GameSession_InitializedServer, (Action<NetworkConnection, bool>)Evt_OnHandleGameSessionStart);
+                }
+            });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void Evt_OnHandleGameSessionEnd()
+        {
+            LoadSceneAsync("Scn_Start", LoadSceneMode.Single, () =>
             {
                 // do something :)
             });
