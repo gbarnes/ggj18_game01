@@ -64,7 +64,7 @@ namespace Framework.Game.Manager
             // subscribe to player initialization!
             Observer.Subscribe(CommandType.Save, (Action)Evt_OnHandleSaveGame);
 
-            Observer.TriggerDelayed(CommandType.GameSession_Start, 2.0f, null);
+            //Observer.TriggerDelayed(CommandType.GameSession_Start, 2.0f, null);
 			/*AddState(new DefaultGameState());*/
         }
 
