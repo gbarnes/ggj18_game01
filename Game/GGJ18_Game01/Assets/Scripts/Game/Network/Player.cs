@@ -166,6 +166,10 @@ public class Player : NetworkBehaviour
                 if (tempObj is Stash)
                 {
                     Stash tempStash = (Stash)tempObj;
+                    if (tempStash.Item == ItemType.None && this.holdingItem == ItemType.None)
+                        Observer.Trigger(CommandType.UI_ShowNotification);
+
+
                     CmdRequestAccessStash(tempStash.netId);
                     
                 }
