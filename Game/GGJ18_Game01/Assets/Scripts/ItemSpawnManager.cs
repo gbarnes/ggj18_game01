@@ -11,7 +11,9 @@ public class ItemSpawnManager: NetworkBehaviour
     private List<Stash> _stashes;
     // Use this for initialization
     void Start()
-    {        
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+
         Locator.Register<ItemSpawnManager>(this);
 
         if(isServer)

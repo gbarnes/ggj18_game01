@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TransformSyncMode: 3
+  m_TransformSyncMode: 1
   m_SendInterval: 0.033333335
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
@@ -275,6 +275,9 @@ MonoBehaviour:
   Angle: 0
   ControllerOn: 0
   InvertedY: 0
+  FuelDrain: 1
+  FuelRefill: 1
+  Fuel: 100
 --- !u!136 &136147047973168152
 CapsuleCollider:
   m_ObjectHideFlags: 1
