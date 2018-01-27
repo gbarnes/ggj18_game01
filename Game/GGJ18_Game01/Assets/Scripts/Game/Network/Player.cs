@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Framework.Service;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -17,7 +19,9 @@ public class Player : NetworkBehaviour
 	void Start () {
         movement = GetComponent<PlayerMovement>();
 
-        if(isLocalPlayer)
+        Observer.Subscribe(CommandType.Game_HoldingItemChanged, (Action)OnHoldingItemChanged);
+
+        if (isLocalPlayer)
         {
             GameObject camera = GameObject.Instantiate(CameraPrefab, Vector3.zero, Quaternion.identity);
             camera.transform.parent = this.transform;
@@ -25,6 +29,11 @@ public class Player : NetworkBehaviour
             movement.Cam = camera.GetComponent<Camera>();
             camera.tag = "MainCamera";
         }
+    }
+
+    void OnHoldingItemChanged()
+    {
+        Debug.Log("[Player] Holding item changed.");
     }
 	
 	// Update is called once per frame
@@ -40,7 +49,10 @@ public class Player : NetworkBehaviour
             }
 
             if (Input.GetKeyDown(KeyCode.T))
+            {
+                Observer.Trigger(CommandType.Game_HoldingItemChanged);
                 CmdChangeColor();
+            }
         }
     }
 
@@ -57,8 +69,8 @@ public class Player : NetworkBehaviour
 
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit))
         {
-            if(hit.transform.gameObject.GetComponent<Stash)
-            Debug.Log("Hitted: Something "+ hit.transform.gameObject.name);
+            
+            Debug.Log("Hit: Something "+ hit.transform.gameObject.name);
             //more code
         }
     }
