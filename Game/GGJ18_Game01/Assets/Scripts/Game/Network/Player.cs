@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class Player : NetworkBehaviour {
+public class Player : NetworkBehaviour
+{
 
     [SyncVar]
     public bool testVar = false;
@@ -22,6 +23,7 @@ public class Player : NetworkBehaviour {
             camera.transform.parent = this.transform;
             camera.transform.localPosition = new Vector3(0.0f, 0.8000031f, 0.0f);
             movement.Cam = camera.GetComponent<Camera>();
+            camera.tag = "MainCamera";
         }
     }
 	
@@ -32,6 +34,11 @@ public class Player : NetworkBehaviour {
         {
             movement.CustomUpdate();
 
+            if (Input.GetKey(KeyCode.F))
+            {
+                interactionButtonPressed();
+            }
+
             if (Input.GetKeyDown(KeyCode.T))
                 CmdChangeColor();
         }
@@ -41,5 +48,18 @@ public class Player : NetworkBehaviour {
     void CmdChangeColor()
     {
         GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 0, 0));
+    }
+
+    void interactionButtonPressed()
+    {
+        RaycastHit hit;
+        //Ray forwardRay = new Ray(Camera.main.transform.position, transform.forward);
+
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit))
+        {
+            if(hit.transform.gameObject.GetComponent<Stash)
+            Debug.Log("Hitted: Something "+ hit.transform.gameObject.name);
+            //more code
+        }
     }
 }
