@@ -12,7 +12,7 @@ public class Station : InteractableObject
 
     public void AccessByPlayer(Player p)
     {
-        if(OwnerId == p.netId && p.holdingItem != ItemType.None)
+        if(p.holdingItem != ItemType.None)
         {
             if (isBlueStation && p.holdingItem != ItemType.Crystal_Blue)
                 return;
