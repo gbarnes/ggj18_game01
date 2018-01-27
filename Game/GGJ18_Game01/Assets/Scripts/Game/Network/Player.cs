@@ -15,14 +15,14 @@ public class Player : NetworkBehaviour
 
     private PlayerMovement movement;
 
-    [SyncVar]
+    [SyncVar(hook = "OnHoldingItemChanged")]
     public ItemType holdingItem = ItemType.None;
     // Use this for initialization
     void Start () {
         movement = GetComponent<PlayerMovement>();
         LevelGenerator generator = Locator.Get<LevelGenerator>();
 
-        Observer.Subscribe(CommandType.Game_HoldingItemChanged, (Action)OnHoldingItemChanged);
+        Observer.Subscribe(CommandType.Game_HoldingItemChanged, (Action<ItemType>)OnHoldingItemChanged);
 
         if (generator != null)
             this.transform.position = Vector3.up * (generator.Radius / 4);
@@ -32,18 +32,18 @@ public class Player : NetworkBehaviour
             GameObject camera = GameObject.Instantiate(CameraPrefab, Vector3.zero, Quaternion.identity);
             camera.transform.parent = this.transform;
             camera.transform.localPosition = new Vector3(0.0f, 0.8000031f, 0.0f);
-            movement.Cam = camera.GetComponent<Camera>(); 
+            movement.Cam = camera.GetComponent<Camera>();
             camera.tag = "MainCamera";
         }
     }
 
-    void OnHoldingItemChanged()
+    void OnHoldingItemChanged(ItemType item)
     {
         Debug.Log("[Player] Holding item changed.");
 
-        if (holdingItem == ItemType.Crystal_Blue)
+        if (item == ItemType.Crystal_Blue)
             GetComponent<Renderer>().material.SetColor("_Color", new Color(0, 0, 1));
-        else if (holdingItem == ItemType.Crystal_Red)
+        else if (item == ItemType.Crystal_Red)
             GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 0, 0));
         else
             GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 1, 1));
@@ -95,7 +95,7 @@ public class Player : NetworkBehaviour
                         {
                             holdingItem = tempStash.Item;
                             tempStash.Item = ItemType.None;
-                            Observer.Trigger(CommandType.Game_HoldingItemChanged);
+                            Observer.Trigger(CommandType.Game_HoldingItemChanged, holdingItem);
                         }
 
                     }
@@ -105,7 +105,7 @@ public class Player : NetworkBehaviour
                         {
                             tempStash.Item = holdingItem;
                             holdingItem = ItemType.None;
-                            Observer.Trigger(CommandType.Game_HoldingItemChanged);
+                            Observer.Trigger(CommandType.Game_HoldingItemChanged, holdingItem);
                         }
                     }
                 }
@@ -116,14 +116,14 @@ public class Player : NetworkBehaviour
                     if (holdingItem == ItemType.None)
                     {
                         holdingItem = tempStation.GetCrystal();
-                        Observer.Trigger(CommandType.Game_HoldingItemChanged);
+                        Observer.Trigger(CommandType.Game_HoldingItemChanged, holdingItem);
                     }
                     else
                     {
                         if(tempStation.AddCrystal(holdingItem))
                         {
                             holdingItem = ItemType.None;
-                            Observer.Trigger(CommandType.Game_HoldingItemChanged);
+                            Observer.Trigger(CommandType.Game_HoldingItemChanged, holdingItem);
                         }
                     }
                 }
