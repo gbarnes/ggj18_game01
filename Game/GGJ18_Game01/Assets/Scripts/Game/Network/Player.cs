@@ -15,7 +15,7 @@ public class Player : NetworkBehaviour
 
     private PlayerMovement movement;
 
-    [SyncVar(hook = "OnHoldingItemChanged")]
+    [SyncVar]
     public ItemType holdingItem = ItemType.None;
     // Use this for initialization
     void Start () {
