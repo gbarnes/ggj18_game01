@@ -15,8 +15,9 @@ public class Player : NetworkBehaviour
 
     private PlayerMovement movement;
 
+    [SyncVar]
+    public ItemType holdingItem = ItemType.None;
     // Use this for initialization
-    
     void Start () {
         movement = GetComponent<PlayerMovement>();
         LevelGenerator generator = Locator.Get<LevelGenerator>();
@@ -74,13 +75,52 @@ public class Player : NetworkBehaviour
 
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit))
         {
-<<<<<<< HEAD
+            InteractableObject tempObj = hit.transform.gameObject.GetComponent<InteractableObject>();            
             
-            Debug.Log("Hit: Something "+ hit.transform.gameObject.name);
-=======
-            //if(hit.transform.gameObject.GetComponent<Stash)
-            Debug.Log("Hitted: Something "+ hit.transform.gameObject.name);
->>>>>>> ef7e4639e289ba5347034956c9ba5ce41e400746
+            if(tempObj != null)
+            {
+                if (tempObj is Stash)
+                {
+                    Stash tempStash = (Stash)tempObj;
+
+                    if (holdingItem == ItemType.None)
+                    {
+                        if (tempStash.Item != ItemType.None)
+                        {
+                            holdingItem = tempStash.Item;
+                            tempStash.Item = ItemType.None;
+                        }
+
+                    }
+                    else
+                    {
+                        if (tempStash.Item == ItemType.None)
+                        {
+                            tempStash.Item = holdingItem;
+                            holdingItem = ItemType.None;
+                        }
+                    }
+                }
+                else if(tempObj is Station)
+                {
+                    Station tempStation = (Station)tempObj;
+
+                    if (holdingItem == ItemType.None)
+                    {
+                        holdingItem = tempStation.GetCrystal();
+                    }
+                    else
+                    {
+                        if(tempStation.AddCrystal(holdingItem))
+                        {
+                            holdingItem = ItemType.None;
+                        }
+                    }
+                }
+                
+            }
+
+            Debug.Log("Hit: Something " + hit.transform.gameObject.name);
             //more code
         }
     }
