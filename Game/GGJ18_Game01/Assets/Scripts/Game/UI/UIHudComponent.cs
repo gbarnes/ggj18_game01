@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Framework.Game.Manager;
+using Framework.Service;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,10 +9,13 @@ public class UIHudComponent : MonoBehaviour {
 
     public GameObject reticuleDot;
     public GameObject reticuleRing;
+    public GameObject fuelMeter;
+
+    private PlayerMovement movement;
 
     // Use this for initialization
     void Start () {
-		
+        movement = Locator.Get<PlayerMovement>();
 	}
 
     // Update is called once per frame
@@ -30,6 +35,12 @@ public class UIHudComponent : MonoBehaviour {
         {
             reticuleDot.SetActive(true);
             reticuleRing.SetActive(false);
+        }
+
+        if(movement != null) {
+            fuelMeter.GetComponent<Slider>().value = movement.Fuel;
+        } else {
+            movement = Locator.Get<PlayerMovement>();
         }
     }
 }
