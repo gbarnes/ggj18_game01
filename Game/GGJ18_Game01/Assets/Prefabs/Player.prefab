@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 114475159987686950}
   - component: {fileID: 114530210450558026}
   - component: {fileID: 114713138770640900}
+  - component: {fileID: 114262904728056990}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -184,6 +185,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114262904728056990
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1065035455080140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dc9ce29669a0d64fa8ccca84597957d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RadarBlip: {fileID: 0}
 --- !u!114 &114475159987686950
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -249,6 +262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testVar: 0
+  isRedPlayer: 1
   CameraPrefab: {fileID: 1103691442987572, guid: ac657ce52cfed974b8fca69f3784d93c,
     type: 2}
   holdingItem: 0
@@ -264,7 +278,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Gravity: 5
-  Jump: 2
+  Thrust: 2
+  SprintBoost: 2
   Accleration: 2
   MaxSpeed: 50
   SensitivityX: 4
@@ -275,7 +290,8 @@ MonoBehaviour:
   Angle: 0
   ControllerOn: 0
   InvertedY: 0
-  FuelDrain: 80
+  FuelDrain: 50
+  SprintDrain: 20
   FuelRefill: 30
   Fuel: 100
 --- !u!136 &136147047973168152

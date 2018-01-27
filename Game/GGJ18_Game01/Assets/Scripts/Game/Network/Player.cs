@@ -21,7 +21,10 @@ public class Player : NetworkBehaviour
     [SyncVar(hook = "OnHoldingItemChanged")]
     public ItemType holdingItem = ItemType.None;
 
-
+    private void Awake()
+    {
+        Locator.Register<Player>(this);
+    }
     // Use this for initialization
     void Start () {
         movement = GetComponent<PlayerMovement>();
