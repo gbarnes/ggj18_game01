@@ -97,11 +97,11 @@ public class Player : NetworkBehaviour
         if (stash.Item != ItemType.None)
         {
             this.holdingItem = stash.Item;
-            stash.Item = ItemType.None;
+            stash.ChangeItem(ItemType.None);
         }
         else
         {
-            stash.Item = this.holdingItem;
+            stash.ChangeItem(this.holdingItem);
             this.holdingItem = ItemType.None;
         }
     }
