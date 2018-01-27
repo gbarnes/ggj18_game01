@@ -18,8 +18,14 @@ public class PlayerMovement : MonoBehaviour
     public bool ControllerOn;
     public bool InvertedY;
 
+    public float FuelDrain = 1;
+    public float FuelRefill = 1;
+    public float Fuel = 100;
+
     private Rigidbody _rig;
     private Vector3 _gravity;
+    private bool _usingJetpack;
+    private bool _lockJetpack;
 
     void Start()
     {
@@ -30,17 +36,31 @@ public class PlayerMovement : MonoBehaviour
     public void CustomUpdate()
     {
         ApplyMovement();
+        UpdateFuel();
         _gravity = -this.transform.position.normalized * Gravity;
         _rig.velocity += _gravity;
         transform.rotation = Quaternion.FromToRotation(transform.up, -_gravity) * transform.rotation;
+    }
+
+    public void UpdateFuel()
+    {
+        if(_usingJetpack)
+        {
+            this.Fuel -= this.FuelDrain * Time.deltaTime;
+            if (this.Fuel < 0)
+                StartCoroutine(LockJetpack());
+        }
+        else
+        {
+            if(this.Fuel<100)
+                this.Fuel += this.FuelRefill * Time.deltaTime;
+        }
     }
 
     private void ApplyMovement()
     {
         Vector2 movementInputVector;
         Vector2 aimInputVector;
-        //float rotY = 0;
-        //float rotX = 0;
         if (ControllerOn)
         {
             aimInputVector.y = Input.GetAxis("VerticalRight");
@@ -48,12 +68,14 @@ public class PlayerMovement : MonoBehaviour
 
             movementInputVector.x = Input.GetAxis("VerticalLeft");
             movementInputVector.y = Input.GetAxis("HorizontalLeft");
-
-            //if (Input.GetAxis("TriggerAxis")>0)
+            if(Mathf.Abs(Input.GetAxis("TriggerAxis"))> 0.1f && !_lockJetpack)
             {
                 this._rig.velocity -= _gravity * Jump * Input.GetAxis("TriggerAxis");
-                //return;
+                _usingJetpack = true;
             }
+            else
+                _usingJetpack = false;
+
         }
         else
         {
@@ -63,15 +85,15 @@ public class PlayerMovement : MonoBehaviour
             movementInputVector.y = Input.GetAxis("Horizontal");
             movementInputVector.x = Input.GetAxis("Vertical");
 
-            if (Input.GetButton("Jump"))
+            if (Input.GetButton("Jump") && !_lockJetpack)
             {
                 this._rig.velocity -= _gravity * Jump;
+                _usingJetpack = true;
                 //return;
             }
+            else
+                _usingJetpack = false;
         }
-
-        
-
         if (InvertedY)
             aimInputVector.y *= -1;
 
@@ -85,30 +107,8 @@ public class PlayerMovement : MonoBehaviour
             Quaternion xRot = Quaternion.AngleAxis(aimInputVector.y * SensitivityX, Vector3.left);
             Cam.transform.localRotation *= xRot;
         }
-
-        
-
         var currentSpeed = _rig.velocity;
-
         Vector3 speed = Vector3.zero;
-
-        //if (Input.GetKey(KeyCode.W))
-        //{
-        //    speed += this.transform.forward * Accleration;
-        //}
-        //else if (Input.GetKey(KeyCode.S))
-        //{
-        //    speed += -this.transform.forward * Accleration;
-        //}
-        //if (Input.GetKey(KeyCode.D))
-        //{
-        //    speed += this.transform.right * Accleration;
-        //}
-        //else if (Input.GetKey(KeyCode.A))
-        //{
-        //    speed += -this.transform.right * Accleration;
-        //}
-
         speed += this.transform.forward * movementInputVector.x;
         speed += this.transform.right * movementInputVector.y;
 
@@ -116,5 +116,13 @@ public class PlayerMovement : MonoBehaviour
 
         if (this._rig.velocity.magnitude < MaxSpeed)
             this._rig.velocity += speed;
+    }
+
+    IEnumerator LockJetpack()
+    {
+        _lockJetpack = true;
+        yield return new WaitForSeconds(3);
+        _lockJetpack = false;
+        yield return null;
     }
 }
