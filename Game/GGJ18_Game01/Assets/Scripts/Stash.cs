@@ -21,7 +21,7 @@ public class Stash : InteractableObject {
 
 	// Use this for initialization
 	void Start () {
-
+        item = ItemType.Crystal_Blue;
 	}
 	
 	// Update is called once per frame

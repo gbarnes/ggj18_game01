@@ -56,7 +56,7 @@ public class Player : NetworkBehaviour
         {
             movement.CustomUpdate();
 
-            if (Input.GetKey(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.F))
             {
                 interactionButtonPressed();
             }
