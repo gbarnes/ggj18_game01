@@ -30,11 +30,15 @@ public class StationSlot : InteractableObject
 
             IsFilled = true;
             p.holdingItem = ItemType.None;
+            p.ChangeCrystalsInPosession(1);
         }
         else if(p.holdingItem == ItemType.None && IsFilled)
         {
             IsFilled = false;
             p.holdingItem = AcceptsType;
+
+            GameObject goP = NetworkServer.FindLocalObject(OwnerId);
+            goP.GetComponent<Player>().ChangeCrystalsInPosession(-1);
             return;
         }
     }

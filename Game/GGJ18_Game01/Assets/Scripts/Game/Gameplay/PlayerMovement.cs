@@ -5,7 +5,8 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float Gravity = 1;
-    public float Jump = 1;
+    public float Thrust = 1;
+    public float SprintBoost = 1;
     public float Accleration = 1;
     public float MaxSpeed = 10;
     public float SensitivityX = 10;
@@ -19,13 +20,15 @@ public class PlayerMovement : MonoBehaviour
     public bool InvertedY;
 
     public float FuelDrain = 1;
+    public float SprintDrain = 1;
     public float FuelRefill = 1;
     public float Fuel = 100;
 
     private Rigidbody _rig;
     private Vector3 _gravity;
     private bool _usingJetpack;
-    private bool _lockJetpack;
+    private bool _sprinting;
+    private bool _fuelLocked;
 
     void Start()
     {
@@ -44,17 +47,28 @@ public class PlayerMovement : MonoBehaviour
 
     public void UpdateFuel()
     {
-        if(_usingJetpack)
+        if(_usingJetpack || _sprinting)
         {
-            this.Fuel -= this.FuelDrain * Time.deltaTime;
-            if (this.Fuel < 0)
-                StartCoroutine(LockJetpack());
+            if (_usingJetpack)
+            {
+                this.Fuel -= this.FuelDrain * Time.deltaTime;
+                if (this.Fuel < 0)
+                    StartCoroutine(LockFuel());
+            }
+            if (_sprinting)
+            {
+                this.Fuel -= this.SprintDrain * Time.deltaTime;
+                if (this.Fuel < 0)
+                    StartCoroutine(LockFuel());
+            }
         }
-        else
-        {
-            if(this.Fuel<100)
-                this.Fuel += this.FuelRefill * Time.deltaTime;
-        }
+        else if (this.Fuel < 100)
+                this.Fuel += this.FuelRefill * Time.deltaTime;        
+
+        if (this.Fuel > 100)
+            this.Fuel = 100;
+        else if (this.Fuel < 0)
+            this.Fuel = 0;
     }
 
     private void ApplyMovement()
@@ -68,9 +82,9 @@ public class PlayerMovement : MonoBehaviour
 
             movementInputVector.x = Input.GetAxis("VerticalLeft");
             movementInputVector.y = Input.GetAxis("HorizontalLeft");
-            if(Mathf.Abs(Input.GetAxis("TriggerAxis"))> 0.1f && !_lockJetpack)
+            if(Mathf.Abs(Input.GetAxis("TriggerAxis"))> 0.1f && !_fuelLocked)
             {
-                this._rig.velocity -= _gravity * Jump * Input.GetAxis("TriggerAxis");
+                this._rig.velocity -= _gravity * Thrust * Input.GetAxis("TriggerAxis");
                 _usingJetpack = true;
             }
             else
@@ -85,9 +99,9 @@ public class PlayerMovement : MonoBehaviour
             movementInputVector.y = Input.GetAxis("Horizontal");
             movementInputVector.x = Input.GetAxis("Vertical");
 
-            if (Input.GetButton("Jump") && !_lockJetpack)
+            if (Input.GetButton("Jump") && !_fuelLocked)
             {
-                this._rig.velocity -= _gravity * Jump;
+                this._rig.velocity -= _gravity * Thrust;
                 _usingJetpack = true;
                 //return;
             }
@@ -96,6 +110,8 @@ public class PlayerMovement : MonoBehaviour
         }
         if (InvertedY)
             aimInputVector.y *= -1;
+
+        _sprinting = Input.GetButton("Sprint") && !_fuelLocked;
 
         Quaternion yRot = Quaternion.AngleAxis(aimInputVector.x * SensitivityY, Vector3.up);
 
@@ -115,14 +131,14 @@ public class PlayerMovement : MonoBehaviour
         speed *= Accleration;
 
         if (this._rig.velocity.magnitude < MaxSpeed)
-            this._rig.velocity += speed;
+            this._rig.velocity += (this._sprinting? SprintBoost:1) * speed;
     }
 
-    IEnumerator LockJetpack()
+    IEnumerator LockFuel()
     {
-        _lockJetpack = true;
+        _fuelLocked = true;
         yield return new WaitForSeconds(3);
-        _lockJetpack = false;
+        _fuelLocked = false;
         yield return null;
     }
 }
