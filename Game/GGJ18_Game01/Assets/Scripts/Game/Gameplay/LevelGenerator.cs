@@ -18,7 +18,7 @@ public class LevelGenerator : MonoBehaviour
     void Start()
     {
         Locator.Register<LevelGenerator>(this);
-       // Planet.transform.localScale = Vector3.one * Radius / 2;
+        //Planet.transform.localScale = Vector3.one * Radius / 2;
         Spawn();
     }
 
@@ -31,8 +31,7 @@ public class LevelGenerator : MonoBehaviour
             if (Physics.Raycast(dir, -dir, out hitInfo))
             {
                 int value = Random.Range(0, 3);
-                GameObject obj;
-                obj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                GameObject obj = null;
                 switch (value)
                 {
                     case 0:
@@ -48,11 +47,13 @@ public class LevelGenerator : MonoBehaviour
                         obj = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
                         break;
                 }
-
-                obj.transform.position = hitInfo.point;
-                obj.transform.rotation = Quaternion.FromToRotation(obj.transform.up, dir) * obj.transform.rotation;
-                obj.transform.SetParent(this.transform);
-                obj.transform.localScale = new Vector3(Random.Range(Min, Max), Random.Range(Min, Max) * YMult, Random.Range(Min, Max));
+                if (obj != null)
+                {
+                    obj.transform.position = hitInfo.point;
+                    obj.transform.rotation = Quaternion.FromToRotation(obj.transform.up, dir) * obj.transform.rotation;
+                    obj.transform.SetParent(this.transform);
+                    obj.transform.localScale = new Vector3(Random.Range(Min, Max), Random.Range(Min, Max) * YMult, Random.Range(Min, Max));
+                }
             }
         }
     }
