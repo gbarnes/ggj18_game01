@@ -11,7 +11,7 @@ public class StationSlot : InteractableObject
     public bool IsFilled = false;
 
     public ItemType AcceptsType = ItemType.Crystal_Blue;
-
+    public Animator StationAnimator;
     private void Start()
     {
         if(!isLocalPlayer)
@@ -31,6 +31,10 @@ public class StationSlot : InteractableObject
     void OnFillStateChanged(bool isFilled)
     {
         MeshObject.SetActive(isFilled);
+
+        int currentStationPhase = StationAnimator.GetInteger("Phase");
+        currentStationPhase += isFilled ? 1 : -1;
+        StationAnimator.SetInteger("Phase", Mathf.Clamp(currentStationPhase, 0, 2));
     }
 
 
