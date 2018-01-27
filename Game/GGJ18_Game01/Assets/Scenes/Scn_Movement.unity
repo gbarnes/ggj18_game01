@@ -172,14 +172,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61f6b5c3498915c4899b1aadd8a73a38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Gravity: 5
-  Jump: 1.5
+  Gravity: 1
+  Jump: 2
   Accleration: 2
-  MaxSpeed: 10000
+  MaxSpeed: 50
   SensitivityX: 10
   SensitivityY: 5
-  ClampMin: -90
-  ClampMax: 90
+  ClampMin: -60
+  ClampMax: 60
   Cam: {fileID: 1297239025}
   Angle: 0
 --- !u!23 &23513963
@@ -248,7 +248,7 @@ GameObject:
   - component: {fileID: 97260967}
   - component: {fileID: 97260968}
   m_Layer: 0
-  m_Name: GravityManager
+  m_Name: Level
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
