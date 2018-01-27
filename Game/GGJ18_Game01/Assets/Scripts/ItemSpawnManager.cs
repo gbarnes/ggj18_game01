@@ -20,17 +20,28 @@ public class ItemSpawnManager: NetworkBehaviour
     
     public void GenerateWorldObjects()
     {
-        for(int i = 0; i < _spawnLocations.Length; i++)
+        ShuffleSpawnLocations(this._spawnLocations);
+
+        for (int i = 0; i < _spawnLocations.Length; i++)
         {
-            int index = Random.Range(0, this._spawnLocations.Length);
+            ItemSpawnLocation location = this._spawnLocations[i];
 
-            ItemSpawnLocation location = this._spawnLocations[index];
-
-            int prefabIndex = Random.Range(0, NetworkManager.singleton.spawnPrefabs.Count);
-
+            int prefabIndex = Random.Range(0, NetworkManager.singleton.spawnPrefabs.Count);            
             // instantiate prefab object (either tree, rock or anything else)
             GameObject worldObject = (GameObject)Instantiate(NetworkManager.singleton.spawnPrefabs[prefabIndex], location.transform.position, location.transform.rotation);
             NetworkServer.Spawn(worldObject);
+        }
+    }
+
+    void ShuffleSpawnLocations(ItemSpawnLocation[] spawnLocations)
+    {
+        // Knuth shuffle algorithm :: courtesy of Wikipedia :)
+        for (int t = 0; t < spawnLocations.Length; t++)
+        {
+            ItemSpawnLocation tmp = spawnLocations[t];
+            int r = Random.Range(t, spawnLocations.Length);
+            spawnLocations[t] = spawnLocations[r];
+            spawnLocations[r] = tmp;
         }
     }
 
