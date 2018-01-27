@@ -494,6 +494,10 @@ MonoBehaviour:
   Fuel: 100
   SoundRatio: 1
   AudioPitch: 0
+  IdlePitch: 0
+  WalkPitch: 0
+  ThrustPitch: 0
+  Threshold: 0
   Jetpack: {fileID: 82007418646383164}
 --- !u!136 &136147047973168152
 CapsuleCollider:

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Framework.Service;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -40,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
     private AudioManager _audioManager;
     void Start()
     {
+        Locator.Register(this);
         _rig = GetComponent<Rigidbody>();
         Cam = GetComponentInChildren<Camera>();
         _audioManager = GetComponent<AudioManager>();
