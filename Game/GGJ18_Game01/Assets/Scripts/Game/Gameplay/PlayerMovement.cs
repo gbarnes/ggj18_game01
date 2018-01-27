@@ -22,8 +22,10 @@ public class PlayerMovement : MonoBehaviour
         _rig = GetComponent<Rigidbody>();
     }
 
-    void Update()
+    public void CustomUpdate()
     {
+        
+
         ApplyMovement();
         _gravity = -this.transform.position.normalized * Gravity;
         _rig.velocity += _gravity;
