@@ -2,26 +2,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class ItemSpawnManager: MonoBehaviour
+
+public class ItemSpawnManager: NetworkBehaviour
 {
-    public ItemSpawnLocation[] _spawnLocations;
-    public TransmitterPart[] TransmitterParts;  
+    public ItemSpawnLocation[] _spawnLocations; 
 
     // Use this for initialization
     void Start()
     {        
         Locator.Register<ItemSpawnManager>(this);
-        PlaceTransmitterPartRandomly();
+
+        if(isServer)
+            GenerateWorldObjects();
     }
     
-    public void PlaceTransmitterPartRandomly()
+    public void GenerateWorldObjects()
     {
-        for(int i = 0; i < TransmitterParts.Length; i++)
+        for(int i = 0; i < _spawnLocations.Length; i++)
         {
             int index = Random.Range(0, this._spawnLocations.Length);
 
-            this._spawnLocations[index].AddItem(TransmitterParts[i]);
+            ItemSpawnLocation location = this._spawnLocations[index];
+
+            int prefabIndex = Random.Range(0, NetworkManager.singleton.spawnPrefabs.Count);
+
+            // instantiate prefab object (either tree, rock or anything else)
+            GameObject worldObject = (GameObject)Instantiate(NetworkManager.singleton.spawnPrefabs[prefabIndex], location.transform.position, location.transform.rotation);
+            NetworkServer.Spawn(worldObject);
         }
     }
 
