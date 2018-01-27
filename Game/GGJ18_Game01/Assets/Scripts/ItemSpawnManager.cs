@@ -19,6 +19,7 @@ public class ItemSpawnManager: NetworkBehaviour
 
     void Start()
     {
+       
         Cursor.lockState = CursorLockMode.Locked;
         if(isServer)
         {
