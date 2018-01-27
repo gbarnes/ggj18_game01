@@ -1,4 +1,5 @@
-﻿using Framework.Service;
+﻿using Framework.Game.Manager;
+using Framework.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,10 @@ namespace GGJ_G01.Game.UI
             Observer.Subscribe(CommandType.UI_ShowGameOverScreen, (Action<string>)Evt_OnHandleGameOver);
             BackButton.onClick.AddListener(() =>
             {
+                GameSimulationManager manager = Locator.Get<GameSimulationManager>();
+                GameObject.Destroy(manager);
+                this.gameObject.SetActive(false);
+                
                 NetworkManager.singleton.StopClient();
             });
             this.gameObject.SetActive(false);
