@@ -78,6 +78,7 @@ public class Player : NetworkBehaviour
             camera.transform.localPosition = new Vector3(0.0f, 0.8000031f, 0.0f);
             movement.Cam = camera.GetComponent<Camera>();
             camera.tag = "MainCamera";
+            Locator.Register<PlayerMovement>(movement);
         }
     }
 
