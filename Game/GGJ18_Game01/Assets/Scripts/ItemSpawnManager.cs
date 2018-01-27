@@ -9,6 +9,8 @@ public class ItemSpawnManager: NetworkBehaviour
 {
     public ItemSpawnLocation[] SpawnLocations;
     private List<Stash> _stashes;
+    public List<Stash> StashesWithCrystals;
+    
     // Use this for initialization
     void Start()
     {
@@ -18,7 +20,7 @@ public class ItemSpawnManager: NetworkBehaviour
 
         if(isServer)
         {
-            this._stashes = new List<Stash>();
+           this._stashes = new List<Stash>();
             AssignItemSpawnLocations();
             GenerateWorldObjects();
             DistributeCrystals();
@@ -45,15 +47,21 @@ public class ItemSpawnManager: NetworkBehaviour
     private void DistributeCrystals()
     {
         ItemType crystalToStash = ItemType.Crystal_Blue;
+        Stash randomStash = this._stashes[Random.Range(0, this._stashes.Count)];
 
         for (int i = 0; i < 6; i++)
         {            
             if(i == 3)
             {
                 crystalToStash = ItemType.Crystal_Red;
+            }            
+           
+            while(randomStash.Item != ItemType.None)
+            {
+                randomStash = this._stashes[Random.Range(0, this._stashes.Count)];
             }
 
-            this._stashes[Random.Range(0, this._stashes.Count)].Item = crystalToStash;
+            randomStash.ChangeItem(crystalToStash);
         }
     }
 
