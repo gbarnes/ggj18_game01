@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Framework.Service;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -13,7 +14,24 @@ public enum ItemType
 public class Stash : InteractableObject {
 
     [SyncVar]
-    public ItemType Item;
+    public ItemType Item;    
 
-    
+    public void ChangeItem(ItemType newItem)
+    {
+        Item = newItem;
+
+        ItemSpawnManager itemManager = Locator.Get<ItemSpawnManager>();     
+        if (Item == ItemType.None)
+        {
+            itemManager.StashesWithCrystals.Remove(this);
+        }
+        else
+        {
+            if (!itemManager.StashesWithCrystals.Contains(this))
+            {
+                itemManager.StashesWithCrystals.Add(this);
+            }
+            
+        }        
+    }    
 }
