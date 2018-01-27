@@ -23,6 +23,14 @@ public class PlayerMovement : MonoBehaviour
     public float SprintDrain = 1;
     public float FuelRefill = 1;
     public float Fuel = 100;
+    public float SoundRatio;
+
+    public float AudioPitch;
+    public float IdlePitch;
+    public float WalkPitch;
+    public float ThrustPitch;
+    public float Threshold;
+    public AudioSource Jetpack;
 
     private Rigidbody _rig;
     private Vector3 _gravity;
@@ -50,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_usingJetpack || _sprinting)
         {
+            Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, ThrustPitch, Time.deltaTime);
             if (_usingJetpack)
             {
                 this.Fuel -= this.FuelDrain * Time.deltaTime;
@@ -68,6 +77,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (this.Fuel < 100)
                 this.Fuel += this.FuelRefill * Time.deltaTime;
+            Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, WalkPitch, Time.deltaTime);
             //_audioManager.SetJetpack(false);
         }  
 
@@ -135,6 +145,11 @@ public class PlayerMovement : MonoBehaviour
         speed += this.transform.right * movementInputVector.y;
 
         speed *= Accleration;
+
+        if(speed.magnitude > Threshold)
+            Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, WalkPitch, Time.deltaTime);
+        else
+            Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, IdlePitch, Time.deltaTime);
 
         if (this._rig.velocity.magnitude < MaxSpeed)
             this._rig.velocity += (this._sprinting? SprintBoost:1) * speed;
