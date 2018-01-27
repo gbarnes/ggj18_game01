@@ -13,7 +13,7 @@ namespace GGJ_G01.Game.Manager
     class CustomGameNetworkManager : NetworkManager
     {
         public bool waitForPlayers = false;
-        private bool isServer = false;
+        public bool isServer = false;
         private NetworkConnection serverConnection;
 
         private void Start()
@@ -71,7 +71,7 @@ namespace GGJ_G01.Game.Manager
             GameObject NewInstanceOfPlayer = Instantiate(NetworkManager.singleton.playerPrefab, new Vector3(0.0f, 0.53f, 0.0f), Quaternion.identity) as GameObject;
 
             bool isRedplayer = (NetworkServer.connections.Count == 1);
-            NewInstanceOfPlayer.name = isRedplayer ? "PlayerBlue" : "PlayerRed";
+            NewInstanceOfPlayer.name = !isRedplayer ? "PlayerBlue" : "PlayerRed";
 
             Player pComponent = NewInstanceOfPlayer.GetComponent<Player>();
             if (!isRedplayer)

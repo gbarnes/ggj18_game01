@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 81017945409726930}
   - component: {fileID: 45637113135467310}
   - component: {fileID: 82677532581125842}
+  - component: {fileID: 114840629219258058}
   m_Layer: 0
   m_Name: PlayerCamera
   m_TagString: Untagged
@@ -267,6 +268,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wiggleMultiplier: 1
   maxWiggleUp: 0.1
+--- !u!114 &114840629219258058
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1103691442987572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: 5ed5e72d5ba0b26418479fe63d80ec76, type: 2}
 --- !u!124 &124547431901440548
 Behaviour:
   m_ObjectHideFlags: 1
