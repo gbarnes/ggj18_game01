@@ -10,14 +10,16 @@ public class ItemSpawnManager: NetworkBehaviour
     public ItemSpawnLocation[] SpawnLocations;
     private List<Stash> _stashes;
     public List<Stash> StashesWithCrystals;
-    
+
     // Use this for initialization
+    private void Awake()
+    {
+        Locator.Register<ItemSpawnManager>(this);
+    }
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-
-        Locator.Register<ItemSpawnManager>(this);
-
         if(isServer)
         {
            this._stashes = new List<Stash>();

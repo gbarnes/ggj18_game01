@@ -1,4 +1,5 @@
-﻿using Framework.Service;
+﻿using Framework.Game.Manager;
+using Framework.Service;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,14 +15,51 @@ public class Player : NetworkBehaviour
     [SyncVar]
     public bool isRedPlayer = true;
 
+    [SyncVar]
+    public int Crystals = 0;
+
     public GameObject CameraPrefab;
 
+    private GameSimulationManager sim;
     private PlayerMovement movement;
 
     [SyncVar(hook = "OnHoldingItemChanged")]
     public ItemType holdingItem = ItemType.None;
 
 
+    private void Awake()
+    {
+        Locator.Register<Player>(this);
+    }
+
+    public void ChangeCrystalsInPosession(int value)
+    {
+        Crystals += value;
+        if (Crystals < 0)
+        {
+            Crystals = 0;
+        }
+        else if (Crystals == 3)
+        {
+            // WINN!!!!
+            RpcGameOver(isRedPlayer);
+        }
+    }
+
+    [ClientRpc]
+    void RpcGameOver(bool isRedPlayer)
+    {
+        if (isLocalPlayer)
+        {
+            string player = (isRedPlayer) ? "Red" : "Blue";
+            Observer.Trigger(CommandType.UI_ShowGameOverScreen, player);
+            
+            
+            sim.GameOver = true;
+        }
+    }
+
+    
     // Use this for initialization
     void Start () {
         movement = GetComponent<PlayerMovement>();
@@ -34,6 +72,7 @@ public class Player : NetworkBehaviour
 
         if (isLocalPlayer)
         {
+            sim = Locator.Get<GameSimulationManager>();
             GameObject camera = GameObject.Instantiate(CameraPrefab, Vector3.zero, Quaternion.identity);
             camera.transform.parent = this.transform;
             camera.transform.localPosition = new Vector3(0.0f, 0.8000031f, 0.0f);
@@ -59,6 +98,9 @@ public class Player : NetworkBehaviour
 
         if (isLocalPlayer)
         {
+            if (sim.GameOver)
+                return;
+
             movement.CustomUpdate();
 
             if (Input.GetKeyDown(KeyCode.F))

@@ -491,7 +491,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 344952646}
-  - component: {fileID: 344952645}
   m_Layer: 0
   m_Name: RadarSystem
   m_TagString: Untagged
@@ -499,24 +498,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &344952645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 344952644}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10ba5775445bddd46944836392166a3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RadarImg: {fileID: 0}
-  Player: {fileID: 0}
-  MinDistance: 15
-  Frequency: 0.3
-  Duration: 0.3
-  Distance: 5
-  FadeOut: 0
 --- !u!4 &344952646
 Transform:
   m_ObjectHideFlags: 0
@@ -2080,6 +2061,40 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ea42cf9cc157e3a4a9c998d5528ec18b, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1516746668 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114350567242217204, guid: ea42cf9cc157e3a4a9c998d5528ec18b,
+    type: 2}
+  m_PrefabInternal: {fileID: 1516746667}
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!1 &1516746669 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1636132114039634, guid: ea42cf9cc157e3a4a9c998d5528ec18b,
+    type: 2}
+  m_PrefabInternal: {fileID: 1516746667}
+--- !u!114 &1516746670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1516746669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10ba5775445bddd46944836392166a3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RadarImg: {fileID: 1516746668}
+  PlayerObj: {fileID: 0}
+  MinDistance: 30
+  Frequency: 0.1
+  MinFreq: 0.15
+  MaxFreq: 20
+  Duration: 3
+  Distance: 5
+  FadeOut: 0
+  RadarTimer: 0
+  ClosestDistance: 0
+  RadarBlip: {fileID: 8300000, guid: dd4936fd85e9cf041b98fca4f4541bd9, type: 3}
 --- !u!1 &1525858646
 GameObject:
   m_ObjectHideFlags: 0
