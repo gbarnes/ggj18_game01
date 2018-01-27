@@ -13,7 +13,7 @@ namespace GGJ_G01.Game.Manager
     class CustomGameNetworkManager : NetworkManager
     {
         public bool waitForPlayers = false;
-        private bool isServer = false;
+        public bool isServer = false;
         private NetworkConnection serverConnection;
 
         private void Start()

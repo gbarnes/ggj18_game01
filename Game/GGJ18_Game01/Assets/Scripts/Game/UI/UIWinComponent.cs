@@ -1,5 +1,6 @@
 ﻿using Framework.Game.Manager;
 using Framework.Service;
+using GGJ_G01.Game.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +24,12 @@ namespace GGJ_G01.Game.UI
                 GameSimulationManager manager = Locator.Get<GameSimulationManager>();
                 GameObject.Destroy(manager);
                 this.gameObject.SetActive(false);
-                
-                NetworkManager.singleton.StopClient();
+
+                Player network = Locator.Get<Player>();
+                if(!network.isClient)
+                    NetworkManager.singleton.StopHost();
+                else
+                    NetworkManager.singleton.StopClient();
             });
             this.gameObject.SetActive(false);
             
