@@ -63,6 +63,17 @@ namespace GGJ_G01.Game.Manager
 
         }
 
+
+        public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
+        {
+            //base.OnServerAddPlayer(conn, playerControllerId);
+
+            GameObject NewInstanceOfPlayer = Instantiate(NetworkManager.singleton.playerPrefab, new Vector3(0.0f, 0.53f, 0.0f), Quaternion.identity) as GameObject;
+            NewInstanceOfPlayer.name = "Player01";
+            NetworkServer.AddPlayerForConnection(conn, NewInstanceOfPlayer, 0);
+
+        }
+
         public override void OnServerConnect(NetworkConnection conn)
         {
             base.OnServerConnect(conn);
