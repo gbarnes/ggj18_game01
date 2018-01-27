@@ -6,3 +6,4 @@ Game/GGJ18_Game01/GGJ18_Game01.CSharp.csproj
 Game/GGJ18_Game01/GGJ18_Game01.CSharp.Plugins.csproj
 Game/GGJ18_Game01/GGJ18_Game01.CSharp.Editor.Plugins.csproj
 Game/GGJ18_Game01/GGJ18_Game01.sln
+*.csproj

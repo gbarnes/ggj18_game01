@@ -12,6 +12,7 @@ namespace GGJ_G01.Game.Manager
 {
     class CustomGameNetworkManager : NetworkManager
     {
+        public bool waitForPlayers = false;
         private bool isServer = false;
         private NetworkConnection serverConnection;
 
@@ -76,10 +77,16 @@ namespace GGJ_G01.Game.Manager
             }
             else
             {
-                Observer.Trigger(CommandType.GameSession_InitializedServer);
-                manager.ChangeState(GameplayState.Game);
+
+
                 //manager.Pause();
-                Time.timeScale = 0;
+                if (waitForPlayers)
+                {
+                    Time.timeScale = 0;
+                    Observer.Trigger(CommandType.GameSession_InitializedServer);
+                }
+
+                manager.ChangeState(GameplayState.Game);
             }
         }
     }

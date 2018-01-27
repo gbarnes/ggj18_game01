@@ -137,6 +137,7 @@ namespace Framework.Game.Input
 				InvokeEvent(InputDeviceEventType.MouseClick, UnityEngine.Input.mousePosition);
 			}*/
             #endregion
+            
         }
 
 		/// <summary>
