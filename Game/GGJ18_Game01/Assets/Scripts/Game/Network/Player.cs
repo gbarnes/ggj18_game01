@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Framework.Service;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -13,11 +14,16 @@ public class Player : NetworkBehaviour
 
     private PlayerMovement movement;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    
+    void Start () {
         movement = GetComponent<PlayerMovement>();
+        LevelGenerator generator = Locator.Get<LevelGenerator>();
 
-        if(isLocalPlayer)
+        if (generator != null)
+            this.transform.position = Vector3.up * (generator.Radius / 4);
+
+        if (isLocalPlayer)
         {
             GameObject camera = GameObject.Instantiate(CameraPrefab, Vector3.zero, Quaternion.identity);
             camera.transform.parent = this.transform;
@@ -57,7 +63,7 @@ public class Player : NetworkBehaviour
 
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit))
         {
-            if(hit.transform.gameObject.GetComponent<Stash)
+            //if(hit.transform.gameObject.GetComponent<Stash)
             Debug.Log("Hitted: Something "+ hit.transform.gameObject.name);
             //more code
         }
