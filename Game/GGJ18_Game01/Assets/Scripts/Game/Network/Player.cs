@@ -11,6 +11,9 @@ public class Player : NetworkBehaviour
     [SyncVar]
     public bool testVar = false;
 
+    [SyncVar]
+    public bool isRedPlayer = true;
+
     public GameObject CameraPrefab;
 
     private PlayerMovement movement;
@@ -80,7 +83,7 @@ public class Player : NetworkBehaviour
     public void CmdRequestAccessStation(NetworkInstanceId netId)
     {
         GameObject go = NetworkServer.FindLocalObject(netId);
-        Station station = go.GetComponent<Station>();
+        StationSlot station = go.GetComponent<StationSlot>();
 
         station.AccessByPlayer(this);
     }
@@ -122,9 +125,9 @@ public class Player : NetworkBehaviour
                     CmdRequestAccessStash(tempStash.netId);
                     
                 }
-                else if(tempObj is Station)
+                else if(tempObj is StationSlot)
                 {
-                    Station tempStation = (Station)tempObj;
+                    StationSlot tempStation = (StationSlot)tempObj;
                     CmdRequestAccessStation(tempStation.netId);
                 }
                 
