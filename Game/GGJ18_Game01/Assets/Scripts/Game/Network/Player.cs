@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Framework.Service;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -13,11 +15,19 @@ public class Player : NetworkBehaviour
 
     private PlayerMovement movement;
 
-	// Use this for initialization
-	void Start () {
+    [SyncVar]
+    public ItemType holdingItem = ItemType.None;
+    // Use this for initialization
+    void Start () {
         movement = GetComponent<PlayerMovement>();
+        LevelGenerator generator = Locator.Get<LevelGenerator>();
 
-        if(isLocalPlayer)
+        Observer.Subscribe(CommandType.Game_HoldingItemChanged, (Action)OnHoldingItemChanged);
+
+        if (generator != null)
+            this.transform.position = Vector3.up * (generator.Radius / 4);
+
+        if (isLocalPlayer)
         {
             GameObject camera = GameObject.Instantiate(CameraPrefab, Vector3.zero, Quaternion.identity);
             camera.transform.parent = this.transform;
@@ -25,6 +35,11 @@ public class Player : NetworkBehaviour
             movement.Cam = camera.GetComponent<Camera>(); 
             camera.tag = "MainCamera";
         }
+    }
+
+    void OnHoldingItemChanged()
+    {
+        Debug.Log("[Player] Holding item changed.");
     }
 	
 	// Update is called once per frame
@@ -40,7 +55,10 @@ public class Player : NetworkBehaviour
             }
 
             if (Input.GetKeyDown(KeyCode.T))
+            {
+                Observer.Trigger(CommandType.Game_HoldingItemChanged);
                 CmdChangeColor();
+            }
         }
     }
 
@@ -57,8 +75,52 @@ public class Player : NetworkBehaviour
 
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit))
         {
-            //if(hit.transform.gameObject.GetComponent<Stash)
-            Debug.Log("Hitted: Something "+ hit.transform.gameObject.name);
+            InteractableObject tempObj = hit.transform.gameObject.GetComponent<InteractableObject>();            
+            
+            if(tempObj != null)
+            {
+                if (tempObj is Stash)
+                {
+                    Stash tempStash = (Stash)tempObj;
+
+                    if (holdingItem == ItemType.None)
+                    {
+                        if (tempStash.Item != ItemType.None)
+                        {
+                            holdingItem = tempStash.Item;
+                            tempStash.Item = ItemType.None;
+                        }
+
+                    }
+                    else
+                    {
+                        if (tempStash.Item == ItemType.None)
+                        {
+                            tempStash.Item = holdingItem;
+                            holdingItem = ItemType.None;
+                        }
+                    }
+                }
+                else if(tempObj is Station)
+                {
+                    Station tempStation = (Station)tempObj;
+
+                    if (holdingItem == ItemType.None)
+                    {
+                        holdingItem = tempStation.GetCrystal();
+                    }
+                    else
+                    {
+                        if(tempStation.AddCrystal(holdingItem))
+                        {
+                            holdingItem = ItemType.None;
+                        }
+                    }
+                }
+                
+            }
+
+            Debug.Log("Hit: Something " + hit.transform.gameObject.name);
             //more code
         }
     }
