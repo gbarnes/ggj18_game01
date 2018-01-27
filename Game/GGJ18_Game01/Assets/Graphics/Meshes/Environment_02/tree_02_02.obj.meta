@@ -1,17 +1,17 @@
 fileFormatVersion: 2
-guid: c960792fda986354d8ff9817164df939
-timeCreated: 1517067287
+guid: cee2aebc9b5f40f438dc0cb9fd5396d3
+timeCreated: 1517074192
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
   fileIDToRecycleName:
-    100000: Cliff_1_01
+    100000: default
     100002: //RootNode
-    400000: Cliff_1_01
+    400000: default
     400002: //RootNode
-    2300000: Cliff_1_01
-    3300000: Cliff_1_01
-    4300000: Cliff_1_01
+    2300000: default
+    3300000: default
+    4300000: default
   materials:
     importMaterials: 1
     materialName: 0
