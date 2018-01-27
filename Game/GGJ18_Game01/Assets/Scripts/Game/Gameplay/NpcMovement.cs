@@ -43,7 +43,7 @@ public class NpcMovement : MonoBehaviour {
 
         if (direction.magnitude < PanicDistance)
         {
-            return -direction.normalized*(PanicDistance-direction.magnitude);
+            return (transform.forward.normalized - direction.normalized).normalized * (PanicDistance / direction.magnitude);
         }
         else
             return Vector3.zero;

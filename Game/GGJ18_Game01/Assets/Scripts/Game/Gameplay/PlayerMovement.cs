@@ -29,11 +29,12 @@ public class PlayerMovement : MonoBehaviour
     private bool _usingJetpack;
     private bool _sprinting;
     private bool _fuelLocked;
-
+    private AudioManager _audioManager;
     void Start()
     {
         _rig = GetComponent<Rigidbody>();
         Cam = GetComponentInChildren<Camera>();
+        _audioManager = GetComponent<AudioManager>();
     }
 
     public void CustomUpdate()
@@ -47,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void UpdateFuel()
     {
-        if(_usingJetpack || _sprinting)
+        if (_usingJetpack || _sprinting)
         {
             if (_usingJetpack)
             {
@@ -61,9 +62,14 @@ public class PlayerMovement : MonoBehaviour
                 if (this.Fuel < 0)
                     StartCoroutine(LockFuel());
             }
+            //_audioManager.SetJetpack(true);
         }
-        else if (this.Fuel < 100)
-                this.Fuel += this.FuelRefill * Time.deltaTime;        
+        else
+        {
+            if (this.Fuel < 100)
+                this.Fuel += this.FuelRefill * Time.deltaTime;
+            //_audioManager.SetJetpack(false);
+        }  
 
         if (this.Fuel > 100)
             this.Fuel = 100;

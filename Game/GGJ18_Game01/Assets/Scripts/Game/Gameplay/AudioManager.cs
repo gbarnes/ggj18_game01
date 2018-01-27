@@ -3,20 +3,60 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour {
+public class AudioManager : MonoBehaviour
+{
 
-    public AudioClip RadarBlip;
+    public AudioClip JetpackNormal;
+    public AudioClip JetpackThrust;
+    public AudioSource JetpackN;
+    public AudioSource JetpackT;
 
-    private AudioSource _source;
-	// Use this for initialization
-	void Start () {
-        Locator.Register<AudioManager>(this);
-        _source = Camera.main.gameObject.GetComponent<AudioSource>();
+    public float NormalVolume = 1;
+    public float ThrustVolume = 1;
+
+    public float fadeTime;
+
+    private bool lockFading;
+    private void Start()
+    {
+
     }
 
-    public void PlayRadar()
+    public void SetJetpack(bool thrust)
     {
-        _source = Camera.main.gameObject.GetComponent<AudioSource>();
-        _source.PlayOneShot(RadarBlip);
+        if(!lockFading && ((thrust && !JetpackT.isPlaying) || (!thrust && !JetpackN.isPlaying)))
+        {
+            StartCoroutine(Fade(thrust));
+        }        
+    }
+
+    IEnumerator Fade(bool thrust)
+    {
+        lockFading = true;
+        JetpackT.Play();
+        JetpackN.Play();
+        float timer = 0;
+        while (timer < fadeTime)
+        {
+            float percentage = timer / fadeTime;
+
+            if(thrust)
+            {
+                JetpackT.volume = Mathf.Lerp(0,1,percentage);
+                JetpackN.volume = Mathf.Lerp(1, 0, percentage);
+                JetpackN.Stop();
+            }
+            else
+            {
+                JetpackN.volume = Mathf.Lerp(0, 1, percentage);
+                JetpackT.volume = Mathf.Lerp(1, 0, percentage);
+                JetpackT.Stop();
+            }
+
+            timer += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+        lockFading = false;
+        yield return null;
     }
 }
