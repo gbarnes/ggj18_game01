@@ -119,11 +119,8 @@ public class Player : NetworkBehaviour
                 if (tempObj is Stash)
                 {
                     Stash tempStash = (Stash)tempObj;
-
-                    if (tempStash.Item != ItemType.None)
-                    {
-                        CmdRequestAccessStash(tempStash.netId);
-                    }
+                    CmdRequestAccessStash(tempStash.netId);
+                    
                 }
                 else if(tempObj is Station)
                 {

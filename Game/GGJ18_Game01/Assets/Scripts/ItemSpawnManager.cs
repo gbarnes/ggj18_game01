@@ -7,33 +7,55 @@ using UnityEngine.Networking;
 
 public class ItemSpawnManager: NetworkBehaviour
 {
-    public ItemSpawnLocation[] _spawnLocations; 
-
+    public ItemSpawnLocation[] SpawnLocations;
+    private List<Stash> _stashes;
     // Use this for initialization
     void Start()
     {        
         Locator.Register<ItemSpawnManager>(this);
 
         if(isServer)
+        {
+            this._stashes = new List<Stash>();
+            AssignItemSpawnLocations();
             GenerateWorldObjects();
+            DistributeCrystals();
+        }
     }
     
-    public void GenerateWorldObjects()
+    private void GenerateWorldObjects()
     {
-        ShuffleSpawnLocations(this._spawnLocations);
+        ShuffleSpawnLocations(this.SpawnLocations);
 
-        for (int i = 0; i < _spawnLocations.Length; i++)
+        for (int i = 0; i < SpawnLocations.Length; i++)
         {
-            ItemSpawnLocation location = this._spawnLocations[i];
+            ItemSpawnLocation location = this.SpawnLocations[i];
 
             int prefabIndex = Random.Range(0, NetworkManager.singleton.spawnPrefabs.Count);            
             // instantiate prefab object (either tree, rock or anything else)
-            GameObject worldObject = (GameObject)Instantiate(NetworkManager.singleton.spawnPrefabs[prefabIndex], location.transform.position, location.transform.rotation);
-            NetworkServer.Spawn(worldObject);
+            GameObject stash = (GameObject)Instantiate(NetworkManager.singleton.spawnPrefabs[prefabIndex], location.transform.position, location.transform.rotation);
+            NetworkServer.Spawn(stash);
+
+            this._stashes.Add(stash.GetComponent<Stash>());
         }
     }
 
-    void ShuffleSpawnLocations(ItemSpawnLocation[] spawnLocations)
+    private void DistributeCrystals()
+    {
+        ItemType crystalToStash = ItemType.Crystal_Blue;
+
+        for (int i = 0; i < 6; i++)
+        {            
+            if(i == 3)
+            {
+                crystalToStash = ItemType.Crystal_Red;
+            }
+
+            this._stashes[Random.Range(0, this._stashes.Count)].Item = crystalToStash;
+        }
+    }
+
+    private void ShuffleSpawnLocations(ItemSpawnLocation[] spawnLocations)
     {
         // Knuth shuffle algorithm :: courtesy of Wikipedia :)
         for (int t = 0; t < spawnLocations.Length; t++)
@@ -48,6 +70,6 @@ public class ItemSpawnManager: NetworkBehaviour
     [ContextMenu("AssignItemSpawnLocations")]
     public void AssignItemSpawnLocations()
     {
-        this._spawnLocations = GameObject.FindObjectsOfType<ItemSpawnLocation>();
+        this.SpawnLocations = GameObject.FindObjectsOfType<ItemSpawnLocation>();
     }
 }
