@@ -1,11 +1,11 @@
-﻿using System.Collections;
+﻿using Framework.Service;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 {
     public GameObject Planet;
-    public GameObject Player;
 
     public int Count;
     public float Radius;
@@ -14,15 +14,11 @@ public class LevelGenerator : MonoBehaviour
     public float Max = 1;
     public float YMult = 1;
 
-    private GameObject _environment;
-
     // Use this for initialization
     void Start()
     {
-        Player.transform.position = Vector3.up * (Radius + 2);
+        Locator.Register<LevelGenerator>(this);
         Planet.transform.localScale = Vector3.one * Radius / 2;
-
-        _environment = new GameObject("Environment");
         Spawn();
     }
 
@@ -55,7 +51,7 @@ public class LevelGenerator : MonoBehaviour
 
                 obj.transform.position = hitInfo.point;
                 obj.transform.rotation = Quaternion.FromToRotation(obj.transform.up, dir) * obj.transform.rotation;
-                obj.transform.SetParent(_environment.transform);
+                obj.transform.SetParent(this.transform);
                 obj.transform.localScale = new Vector3(Random.Range(Min, Max), Random.Range(Min, Max) * YMult, Random.Range(Min, Max));
             }
         }
