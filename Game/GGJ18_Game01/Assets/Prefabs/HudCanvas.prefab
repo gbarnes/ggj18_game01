@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 223070176824669920}
   - component: {fileID: 114734975534411894}
   - component: {fileID: 114874294361138808}
+  - component: {fileID: 114036157061265434}
   m_Layer: 5
   m_Name: HudCanvas
   m_TagString: Untagged
@@ -98,6 +99,18 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114036157061265434
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1289112603586634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40995a4623a19334181a78bfc8da49a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reticuleRingImage: {fileID: 1404283046633714}
 --- !u!114 &114094605293328308
 MonoBehaviour:
   m_ObjectHideFlags: 1
