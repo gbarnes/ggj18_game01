@@ -122,9 +122,11 @@
     <Compile Include="Assets\Scripts\Framework\Utility\DLog.cs" />
     <Compile Include="Assets\Scripts\Game\Manager\CustomGameNetworkManager.cs" />
     <Compile Include="Assets\Scripts\Game\Network\Player.cs" />
+    <Compile Include="Assets\Scripts\Game\States\GameloopState.cs" />
     <Compile Include="Assets\Scripts\Game\States\MainMenuState.cs" />
     <Compile Include="Assets\Scripts\Game\UI\UILoadingScreenComponent.cs" />
     <Compile Include="Assets\Scripts\Game\UI\UIMainMenuComponent.cs" />
+    <Compile Include="Assets\Scripts\Game\UI\UIWaitingForPlayersComponent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Graphics\UI\empty.txt" />

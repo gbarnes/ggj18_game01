@@ -1,4 +1,5 @@
-﻿using Framework.Service;
+﻿using Framework.Game.Manager;
+using Framework.Service;
 using Framework.Utility;
 using System;
 using System.Collections.Generic;
@@ -17,50 +18,69 @@ namespace GGJ_G01.Game.Manager
         private void Start()
         {
             Locator.Register<CustomGameNetworkManager>(this);
-          //  Observer.Subscribe(CommandType.GameSession_InitializedServer, (Action)Evt_OnHandleInitializedServer);
-
+            //  Observer.Subscribe(CommandType.GameSession_InitializedServer, (Action)Evt_OnHandleInitializedServer);
+            this.maxConnections = 2;
         }
 
-       /* public override void OnClientDisconnect(NetworkConnection conn)
+        /* public override void OnClientDisconnect(NetworkConnection conn)
+         {
+             base.OnClientDisconnect(conn);
+
+             DLog.Log("Player disconnected from server!");
+             Observer.TriggerDelayed(CommandType.GameSession_End, 2.0f, null);
+         }
+
+         private void Evt_OnHandleInitializedServer()
+         {
+             GameObject NewInstanceOfPlayer = Instantiate(NetworkManager.singleton.playerPrefab) as GameObject;
+             NewInstanceOfPlayer.name = "Player02";
+             NetworkServer.AddPlayerForConnection(serverConnection, NewInstanceOfPlayer, 0);
+         }
+
+         public override void OnClientConnect(NetworkConnection conn)
+         {
+             base.OnClientConnect(conn);
+
+             if (!isServer)
+             {
+                 DLog.Log("Player connected to server!");
+                 Observer.Trigger(CommandType.GameSession_Start, conn, false);
+             } 
+         }*/
+
+        public override void OnServerDisconnect(NetworkConnection conn)
         {
-            base.OnClientDisconnect(conn);
+            NetworkServer.DestroyPlayersForConnection(conn);
 
-            DLog.Log("Player disconnected from server!");
-            Observer.TriggerDelayed(CommandType.GameSession_End, 2.0f, null);
-        }
-
-        private void Evt_OnHandleInitializedServer()
-        {
-            GameObject NewInstanceOfPlayer = Instantiate(NetworkManager.singleton.playerPrefab) as GameObject;
-            NewInstanceOfPlayer.name = "Player02";
-            NetworkServer.AddPlayerForConnection(serverConnection, NewInstanceOfPlayer, 0);
-        }
-
-        public override void OnClientConnect(NetworkConnection conn)
-        {
-            base.OnClientConnect(conn);
-
-            if (!isServer)
+            if (conn.hostId >= 0)
             {
-                DLog.Log("Player connected to server!");
-                Observer.Trigger(CommandType.GameSession_Start, conn, false);
-            } 
+                Observer.Trigger(CommandType.GameSession_End);
+                DLog.Log("Player disconnected!");
+                //manager.Resume();
+                Time.timeScale = 0;
+            }
+
         }
 
         public override void OnServerConnect(NetworkConnection conn)
         {
             base.OnServerConnect(conn);
-            
+            GameSimulationManager manager = Locator.Get<GameSimulationManager>();
+
             if (conn.hostId >= 0)
             {
-                Observer.Trigger(CommandType.GameSession_Start, conn, true);
+                Observer.Trigger(CommandType.GameSession_Start);
                 DLog.Log("Player connected!");
+                //manager.Resume();
+                Time.timeScale = 1;
             }
             else
             {
-                serverConnection = conn;
-                isServer = true;
+                Observer.Trigger(CommandType.GameSession_InitializedServer);
+                manager.ChangeState(GameplayState.Game);
+                //manager.Pause();
+                Time.timeScale = 0;
             }
-        }*/
+        }
     }
 }

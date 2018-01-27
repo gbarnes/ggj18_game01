@@ -43,8 +43,8 @@ namespace Framework.Game.Manager
             }
 
             #region Events
-            Observer.Subscribe(CommandType.GameSession_Start, (Action<NetworkConnection, bool>)Evt_OnHandleGameSessionStart);
-            Observer.Subscribe(CommandType.GameSession_End, (Action)Evt_OnHandleGameSessionEnd);
+            //Observer.Subscribe(CommandType.GameSession_Start, (Action<NetworkConnection, bool>)Evt_OnHandleGameSessionStart);
+           // Observer.Subscribe(CommandType.GameSession_End, (Action)Evt_OnHandleGameSessionEnd);
             #endregion
         }
 

@@ -69,7 +69,9 @@ namespace Framework.Game.Manager
 
             //Observer.TriggerDelayed(CommandType.GameSession_Start, 2.0f, null);
 			AddState(new MainMenuState());
+            AddState(new GameloopState());
             ChangeState(GameplayState.MainMenu);
+            
         }
 
         /// <summary>
