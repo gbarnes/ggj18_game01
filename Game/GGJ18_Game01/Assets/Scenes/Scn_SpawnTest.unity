@@ -2566,6 +2566,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67c64fa78c9a55245aa30bd72e332318, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spawnLocations:
+  - {fileID: 2050182036}
+  - {fileID: 1999016485}
+  - {fileID: 1919877611}
+  - {fileID: 1910128798}
+  - {fileID: 1856879245}
+  - {fileID: 1781528891}
+  - {fileID: 1612300428}
+  - {fileID: 1589242192}
+  - {fileID: 1579260063}
+  - {fileID: 1570625337}
+  - {fileID: 1465456166}
+  - {fileID: 1440219671}
+  - {fileID: 1314793267}
+  - {fileID: 1304146530}
+  - {fileID: 1294249372}
+  - {fileID: 1142691023}
+  - {fileID: 1116892839}
+  - {fileID: 1002419930}
+  - {fileID: 999810891}
+  - {fileID: 964361082}
+  - {fileID: 841902869}
+  - {fileID: 838705331}
+  - {fileID: 765257338}
+  - {fileID: 652292287}
+  - {fileID: 643222356}
+  - {fileID: 588057209}
+  - {fileID: 569721838}
+  - {fileID: 334101099}
+  - {fileID: 316690187}
+  - {fileID: 299715403}
+  - {fileID: 118747296}
+  - {fileID: 112504885}
+  - {fileID: 86739353}
+  - {fileID: 35511015}
+  - {fileID: 34323174}
   TransmitterParts:
   - {fileID: 816339381}
   - {fileID: 753326072}
