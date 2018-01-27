@@ -22,7 +22,7 @@ public class Player : NetworkBehaviour {
 
             Camera cam = camera.AddComponent<Camera>();
             cam.fieldOfView = 62.7f;
-
+            movement.Cam = cam;
         }
     }
 	
