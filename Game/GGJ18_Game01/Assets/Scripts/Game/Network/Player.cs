@@ -15,7 +15,7 @@ public class Player : NetworkBehaviour
 
     private PlayerMovement movement;
 
-    [SyncVar]
+    [SyncVar(hook = "OnHoldingItemChanged")]
     public ItemType holdingItem = ItemType.None;
     // Use this for initialization
     void Start () {
@@ -40,6 +40,13 @@ public class Player : NetworkBehaviour
     void OnHoldingItemChanged()
     {
         Debug.Log("[Player] Holding item changed.");
+
+        if (holdingItem == ItemType.Crystal_Blue)
+            GetComponent<Renderer>().material.SetColor("_Color", new Color(0, 0, 1));
+        else if (holdingItem == ItemType.Crystal_Red)
+            GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 0, 0));
+        else
+            GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 1, 1));
     }
 	
 	// Update is called once per frame
@@ -56,7 +63,6 @@ public class Player : NetworkBehaviour
 
             if (Input.GetKeyDown(KeyCode.T))
             {
-                Observer.Trigger(CommandType.Game_HoldingItemChanged);
                 CmdChangeColor();
             }
         }
@@ -65,7 +71,7 @@ public class Player : NetworkBehaviour
     [Command]
     void CmdChangeColor()
     {
-        GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 0, 0));
+        
     }
 
     void interactionButtonPressed()
@@ -89,6 +95,7 @@ public class Player : NetworkBehaviour
                         {
                             holdingItem = tempStash.Item;
                             tempStash.Item = ItemType.None;
+                            Observer.Trigger(CommandType.Game_HoldingItemChanged);
                         }
 
                     }
@@ -98,6 +105,7 @@ public class Player : NetworkBehaviour
                         {
                             tempStash.Item = holdingItem;
                             holdingItem = ItemType.None;
+                            Observer.Trigger(CommandType.Game_HoldingItemChanged);
                         }
                     }
                 }
@@ -108,12 +116,14 @@ public class Player : NetworkBehaviour
                     if (holdingItem == ItemType.None)
                     {
                         holdingItem = tempStation.GetCrystal();
+                        Observer.Trigger(CommandType.Game_HoldingItemChanged);
                     }
                     else
                     {
                         if(tempStation.AddCrystal(holdingItem))
                         {
                             holdingItem = ItemType.None;
+                            Observer.Trigger(CommandType.Game_HoldingItemChanged);
                         }
                     }
                 }
