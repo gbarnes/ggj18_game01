@@ -70,9 +70,12 @@ namespace GGJ_G01.Game.Manager
 
             GameObject NewInstanceOfPlayer = Instantiate(NetworkManager.singleton.playerPrefab, new Vector3(0.0f, 0.53f, 0.0f), Quaternion.identity) as GameObject;
 
-            NewInstanceOfPlayer.name = (NetworkServer.connections.Count > 1) ? "PlayerBlue" : "PlayerRed";
-            if (NetworkServer.connections.Count > 1)
-                NewInstanceOfPlayer.GetComponent<Player>().isRedPlayer = false;
+            bool isRedplayer = (NetworkServer.connections.Count == 1);
+            NewInstanceOfPlayer.name = isRedplayer ? "PlayerBlue" : "PlayerRed";
+
+            Player pComponent = NewInstanceOfPlayer.GetComponent<Player>();
+            if (!isRedplayer)
+                pComponent.isRedPlayer = false;
             
             NetworkServer.AddPlayerForConnection(conn, NewInstanceOfPlayer, 0);
 
