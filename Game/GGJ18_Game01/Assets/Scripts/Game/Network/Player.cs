@@ -22,7 +22,7 @@ public class Player : NetworkBehaviour
             GameObject camera = GameObject.Instantiate(CameraPrefab, Vector3.zero, Quaternion.identity);
             camera.transform.parent = this.transform;
             camera.transform.localPosition = new Vector3(0.0f, 0.8000031f, 0.0f);
-            movement.Cam = camera.GetComponent<Camera>();
+            movement.Cam = camera.GetComponent<Camera>(); 
             camera.tag = "MainCamera";
         }
     }
@@ -57,7 +57,7 @@ public class Player : NetworkBehaviour
 
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit))
         {
-            if(hit.transform.gameObject.GetComponent<Stash)
+            //if(hit.transform.gameObject.GetComponent<Stash)
             Debug.Log("Hitted: Something "+ hit.transform.gameObject.name);
             //more code
         }
