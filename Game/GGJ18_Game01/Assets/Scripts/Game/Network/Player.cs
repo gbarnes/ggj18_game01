@@ -8,6 +8,8 @@ public class Player : NetworkBehaviour {
     [SyncVar]
     public bool testVar = false;
 
+    public GameObject CameraPrefab;
+
     private PlayerMovement movement;
 
 	// Use this for initialization
@@ -16,13 +18,10 @@ public class Player : NetworkBehaviour {
 
         if(isLocalPlayer)
         {
-            GameObject camera = new GameObject();
+            GameObject camera = GameObject.Instantiate(CameraPrefab, Vector3.zero, Quaternion.identity);
             camera.transform.parent = this.transform;
             camera.transform.localPosition = new Vector3(0.0f, 0.8000031f, 0.0f);
-
-            Camera cam = camera.AddComponent<Camera>();
-            cam.fieldOfView = 62.7f;
-            movement.Cam = cam;
+            movement.Cam = camera.GetComponent<Camera>();
         }
     }
 	
