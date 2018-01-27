@@ -29,6 +29,8 @@ namespace Framework.Game.Manager
         /// 
         /// </summary>
         public GameObject PlayerPrefab;
+
+        public bool GameOver = false;
         #endregion
 
         #region Get / Set

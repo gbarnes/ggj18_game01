@@ -26,7 +26,8 @@ namespace Framework.Service
         GameSession_End,
         GameSession_InitializedServer,
         Save,
-        Game_HoldingItemChanged
+        Game_HoldingItemChanged,
+        UI_ShowGameOverScreen
     }
 
     /// <summary>

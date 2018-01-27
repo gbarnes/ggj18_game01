@@ -1,0 +1,38 @@
+﻿using Framework.Service;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.UI;
+
+namespace GGJ_G01.Game.UI
+{
+    public class UIWinComponent : MonoBehaviour
+    {
+        public Text GameOverText;
+        public Button BackButton;
+
+        void Start()
+        {
+            Observer.Subscribe(CommandType.UI_ShowGameOverScreen, (Action<string>)Evt_OnHandleGameOver);
+            BackButton.onClick.AddListener(() =>
+            {
+                NetworkManager.singleton.StopClient();
+            });
+            this.gameObject.SetActive(false);
+            
+            
+        }
+
+
+        void Evt_OnHandleGameOver(string player)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            this.gameObject.SetActive(true);
+            GameOverText.text = "Player " + player + " won the game!";
+        }
+    }
+}
