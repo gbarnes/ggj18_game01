@@ -112,6 +112,8 @@ public class Player : NetworkBehaviour
             {
                 CmdChangeColor();
             }
+            if (Input.GetKeyDown(KeyCode.Mouse0)) clickedtoHideCursor();
+            if (Input.GetKeyDown(KeyCode.Escape)) escapeToShowCursor();
         }
     }
 
@@ -178,5 +180,16 @@ public class Player : NetworkBehaviour
             Debug.Log("Hit: Something " + hit.transform.gameObject.name);
             //more code
         }
+    }
+
+    void clickedtoHideCursor()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+    void escapeToShowCursor()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 }
