@@ -5,15 +5,12 @@ using UnityEngine;
 public enum ItemType
 {
     None,
-    Antenna_Red,
-    Chip_Red,
-    Fuse_Red,
-    Antenna_Blue,
-    Chip_Blue,
-    Fuse_Blue
+    Crystal_Red,
+    Crystal_Blue
+
 }
 
-public class Stash : MonoBehaviour {
+public class Stash : InteractableObject {
     private ItemType item;
 
     public ItemType Item
@@ -24,7 +21,7 @@ public class Stash : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        item = ItemType.Antenna_Blue;
+
 	}
 	
 	// Update is called once per frame

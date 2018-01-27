@@ -10,9 +10,10 @@ public class Player : NetworkBehaviour
     public bool testVar = false;
 
     private PlayerMovement movement;
-
-	// Use this for initialization
-	void Start () {
+    [SyncVar]
+    public ItemType holdingItem = ItemType.None;
+    // Use this for initialization
+    void Start () {
         movement = GetComponent<PlayerMovement>();
 
         if(isLocalPlayer)
@@ -57,7 +58,50 @@ public class Player : NetworkBehaviour
 
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit))
         {
-            if(hit.transform.gameObject.GetComponent<Stash)
+            InteractableObject tempObj = hit.transform.gameObject.GetComponent<InteractableObject>();            
+            
+            if(tempObj != null)
+            {
+                if (tempObj is Stash)
+                {
+                    Stash tempStash = (Stash)tempObj;
+
+                    if (holdingItem == ItemType.None)
+                    {
+                        if (tempStash.Item != ItemType.None)
+                        {
+                            holdingItem = tempStash.Item;
+                            tempStash.Item = ItemType.None;
+                        }
+
+                    }
+                    else
+                    {
+                        if (tempStash.Item == ItemType.None)
+                        {
+                            tempStash.Item = holdingItem;
+                            holdingItem = ItemType.None;
+                        }
+                    }
+                }
+                else if(tempObj is Station)
+                {
+                    Station tempStation = (Station)tempObj;
+
+                    if (holdingItem == ItemType.None)
+                    {
+                        holdingItem = tempStation.GetCrystal();
+                    }
+                    else
+                    {
+                        if(tempStation.AddCrystal(holdingItem))
+                        {
+                            holdingItem = ItemType.None;
+                        }
+                    }
+                }
+                
+            }
             Debug.Log("Hitted: Something "+ hit.transform.gameObject.name);
             //more code
         }
