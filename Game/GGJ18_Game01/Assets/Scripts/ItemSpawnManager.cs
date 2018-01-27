@@ -5,34 +5,29 @@ using UnityEngine;
 
 public class ItemSpawnManager: MonoBehaviour
 {
-    private List<ItemSpawnLocation> _spawnLocations;
-
+    public ItemSpawnLocation[] _spawnLocations;
     public TransmitterPart[] TransmitterParts;  
 
     // Use this for initialization
     void Start()
-    {
-        this._spawnLocations = new List<ItemSpawnLocation>();
-        Locator.Register<ItemSpawnManager>(this); 
-
+    {        
+        Locator.Register<ItemSpawnManager>(this);
+        PlaceTransmitterPartRandomly();
     }
     
-    public void RegisterSpawnLocation(ItemSpawnLocation spawnLocation)
-    {
-        if(!this._spawnLocations.Contains(spawnLocation))
-        {
-            this._spawnLocations.Add(spawnLocation);
-        }
-    }
-
-    [ContextMenu("PlaceTransmitterParts")]
     public void PlaceTransmitterPartRandomly()
     {
         for(int i = 0; i < TransmitterParts.Length; i++)
         {
-            int index = Random.Range(0, this._spawnLocations.Count);
+            int index = Random.Range(0, this._spawnLocations.Length);
 
             this._spawnLocations[index].AddItem(TransmitterParts[i]);
         }
+    }
+
+    [ContextMenu("AssignItemSpawnLocations")]
+    public void AssignItemSpawnLocations()
+    {
+        this._spawnLocations = GameObject.FindObjectsOfType<ItemSpawnLocation>();
     }
 }
