@@ -110,7 +110,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40995a4623a19334181a78bfc8da49a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reticuleRingImage: {fileID: 1404283046633714}
+  reticuleDot: {fileID: 1805526087758862}
+  reticuleRing: {fileID: 1404283046633714}
 --- !u!114 &114094605293328308
 MonoBehaviour:
   m_ObjectHideFlags: 1
