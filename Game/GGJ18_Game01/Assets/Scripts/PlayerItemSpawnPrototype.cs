@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class PlayerItemSpawnPrototype : MonoBehaviour
 {
     public Transform ItemInHandLocation;
     public Item CurrentItemInHand;
