@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33977520620519602}
   - component: {fileID: 65511141673390838}
   - component: {fileID: 23088352792914748}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sunglasses
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 114475159987686950}
   - component: {fileID: 114530210450558026}
   - component: {fileID: 114713138770640900}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -251,6 +251,7 @@ MonoBehaviour:
   testVar: 0
   CameraPrefab: {fileID: 1103691442987572, guid: ac657ce52cfed974b8fca69f3784d93c,
     type: 2}
+  holdingItem: 0
 --- !u!114 &114807091592727622
 MonoBehaviour:
   m_ObjectHideFlags: 1

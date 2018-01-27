@@ -18,7 +18,7 @@ public class LevelGenerator : MonoBehaviour
     void Start()
     {
         Locator.Register<LevelGenerator>(this);
-        Planet.transform.localScale = Vector3.one * Radius / 2;
+       // Planet.transform.localScale = Vector3.one * Radius / 2;
         Spawn();
     }
 

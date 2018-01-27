@@ -17,6 +17,8 @@ public class Player : NetworkBehaviour
 
     [SyncVar(hook = "OnHoldingItemChanged")]
     public ItemType holdingItem = ItemType.None;
+
+
     // Use this for initialization
     void Start () {
         movement = GetComponent<PlayerMovement>();
@@ -56,7 +58,7 @@ public class Player : NetworkBehaviour
         {
             movement.CustomUpdate();
 
-            if (Input.GetKey(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.F))
             {
                 interactionButtonPressed();
             }
@@ -74,12 +76,41 @@ public class Player : NetworkBehaviour
         
     }
 
+    [Command]
+    public void CmdRequestAccessStation(NetworkInstanceId netId)
+    {
+        GameObject go = NetworkServer.FindLocalObject(netId);
+        Station station = go.GetComponent<Station>();
+
+        station.AccessByPlayer(this);
+    }
+
+    [Command]
+    public void CmdRequestAccessStash(NetworkInstanceId netId)
+    {
+        GameObject go = NetworkServer.FindLocalObject(netId);
+        Stash stash = go.GetComponent<Stash>();
+
+        if (stash.Item == ItemType.None && this.holdingItem == ItemType.None)
+            return;
+
+        if (stash.Item != ItemType.None)
+        {
+            this.holdingItem = stash.Item;
+            stash.Item = ItemType.None;
+        }
+        else
+        {
+            stash.Item = this.holdingItem;
+            this.holdingItem = ItemType.None;
+        }
+    }
+
     void interactionButtonPressed()
     {
         RaycastHit hit;
         //Ray forwardRay = new Ray(Camera.main.transform.position, transform.forward);
-
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit))
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, Mathf.Infinity, LayerMask.GetMask("Interaction")))
         {
             InteractableObject tempObj = hit.transform.gameObject.GetComponent<InteractableObject>();            
             
@@ -89,7 +120,7 @@ public class Player : NetworkBehaviour
                 {
                     Stash tempStash = (Stash)tempObj;
 
-                    if (holdingItem == ItemType.None)
+                    /*if (holdingItem == ItemType.None)
                     {
                         if (tempStash.Item != ItemType.None)
                         {
@@ -107,6 +138,13 @@ public class Player : NetworkBehaviour
                             holdingItem = ItemType.None;
                             Observer.Trigger(CommandType.Game_HoldingItemChanged, holdingItem);
                         }
+                    }*/
+
+                    if (tempStash.Item != ItemType.None)
+                    {
+                       // this.holdingItem = tempStash.Item;
+                        //Observer.Trigger(CommandType.Game_HoldingItemChanged, holdingItem);
+                        CmdRequestAccessStash(tempStash.netId);
                     }
                 }
                 else if(tempObj is Station)

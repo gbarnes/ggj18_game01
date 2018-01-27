@@ -1,9 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class Station : InteractableObject
 {
+    public NetworkInstanceId OwnerId;
+
+    public void AccessByPlayer(Player p)
+    {
+
+    }
+
+
     public bool isBlueStation = true;
     public ItemType crystal1;
     public ItemType crystal2;
