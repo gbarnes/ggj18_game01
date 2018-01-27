@@ -120,50 +120,15 @@ public class Player : NetworkBehaviour
                 {
                     Stash tempStash = (Stash)tempObj;
 
-                    /*if (holdingItem == ItemType.None)
-                    {
-                        if (tempStash.Item != ItemType.None)
-                        {
-                            holdingItem = tempStash.Item;
-                            tempStash.Item = ItemType.None;
-                            Observer.Trigger(CommandType.Game_HoldingItemChanged, holdingItem);
-                        }
-
-                    }
-                    else
-                    {
-                        if (tempStash.Item == ItemType.None)
-                        {
-                            tempStash.Item = holdingItem;
-                            holdingItem = ItemType.None;
-                            Observer.Trigger(CommandType.Game_HoldingItemChanged, holdingItem);
-                        }
-                    }*/
-
                     if (tempStash.Item != ItemType.None)
                     {
-                       // this.holdingItem = tempStash.Item;
-                        //Observer.Trigger(CommandType.Game_HoldingItemChanged, holdingItem);
                         CmdRequestAccessStash(tempStash.netId);
                     }
                 }
                 else if(tempObj is Station)
                 {
                     Station tempStation = (Station)tempObj;
-
-                    if (holdingItem == ItemType.None)
-                    {
-                        holdingItem = tempStation.GetCrystal();
-                        Observer.Trigger(CommandType.Game_HoldingItemChanged, holdingItem);
-                    }
-                    else
-                    {
-                        if(tempStation.AddCrystal(holdingItem))
-                        {
-                            holdingItem = ItemType.None;
-                            Observer.Trigger(CommandType.Game_HoldingItemChanged, holdingItem);
-                        }
-                    }
+                    CmdRequestAccessStation(tempStation.netId);
                 }
                 
             }
