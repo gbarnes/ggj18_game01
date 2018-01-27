@@ -38,6 +38,12 @@ public class UIHudComponent : MonoBehaviour {
         }
 
         if(movement != null) {
+            float fuel = movement.Fuel;
+            if (fuel == 100)
+                fuelMeter.SetActive(false);
+            else
+                fuelMeter.SetActive(true);
+                    
             fuelMeter.GetComponent<Slider>().value = movement.Fuel;
         } else {
             movement = Locator.Get<PlayerMovement>();
