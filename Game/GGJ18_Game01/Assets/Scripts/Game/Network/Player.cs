@@ -14,6 +14,16 @@ public class Player : NetworkBehaviour {
 	void Start () {
         movement = GetComponent<PlayerMovement>();
 
+        if(isLocalPlayer)
+        {
+            GameObject camera = new GameObject();
+            camera.transform.parent = this.transform;
+            camera.transform.position = new Vector3(0.0f, 0.8000031f, 0.0f);
+
+            Camera cam = camera.AddComponent<Camera>();
+            cam.fieldOfView = 62.7f;
+
+        }
     }
 	
 	// Update is called once per frame

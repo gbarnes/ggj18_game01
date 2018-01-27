@@ -70,6 +70,9 @@ namespace GGJ_G01.Game.Manager
 
             GameObject NewInstanceOfPlayer = Instantiate(NetworkManager.singleton.playerPrefab, new Vector3(0.0f, 0.53f, 0.0f), Quaternion.identity) as GameObject;
             NewInstanceOfPlayer.name = "Player01";
+
+            
+
             NetworkServer.AddPlayerForConnection(conn, NewInstanceOfPlayer, 0);
 
         }
