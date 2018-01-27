@@ -32,7 +32,7 @@ public class Player : NetworkBehaviour
             GameObject camera = GameObject.Instantiate(CameraPrefab, Vector3.zero, Quaternion.identity);
             camera.transform.parent = this.transform;
             camera.transform.localPosition = new Vector3(0.0f, 0.8000031f, 0.0f);
-            movement.Cam = camera.GetComponent<Camera>();
+            movement.Cam = camera.GetComponent<Camera>(); 
             camera.tag = "MainCamera";
         }
     }
