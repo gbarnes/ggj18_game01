@@ -16,6 +16,7 @@ namespace GGJ_G01.Game.UI
         public Button StartServerBtn;
         public Button StartClientBtn;
         public InputField IPAddressTxt;
+        public Text ContinueText;
         public GameObject OutsidePanel;
 
         private void Start()
@@ -32,6 +33,15 @@ namespace GGJ_G01.Game.UI
                 networkManager.networkAddress = IPAddressTxt.text;
                 networkManager.StartClient();
             });
+        }
+
+        private void Update()
+        {
+            if(Input.anyKeyDown)
+            {
+                OutsidePanel.SetActive(true);
+                ContinueText.gameObject.SetActive(false);
+            }
         }
     }
 }

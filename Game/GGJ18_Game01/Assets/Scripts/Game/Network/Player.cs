@@ -176,6 +176,9 @@ public class Player : NetworkBehaviour
                 else if(tempObj is StationSlot)
                 {
                     StationSlot tempStation = (StationSlot)tempObj;
+                    if (!tempStation.IsFilled && this.holdingItem == ItemType.None)
+                        Observer.Trigger(CommandType.UI_ShowNotification);
+
                     CmdRequestAccessStation(tempStation.netId);
                 }
                 
