@@ -15,6 +15,7 @@ namespace GGJ_G01.Game.Manager
         public bool waitForPlayers = false;
         public bool isServer = false;
         private NetworkConnection serverConnection;
+        public List<StationSlot> Slots = new List<StationSlot>();
 
         private void Start()
         {
@@ -83,6 +84,13 @@ namespace GGJ_G01.Game.Manager
             
             NetworkServer.AddPlayerForConnection(conn, NewInstanceOfPlayer, 0);
 
+            foreach(StationSlot slot in Slots)
+            {
+                if (slot.AcceptsType == ItemType.Crystal_Red && pComponent.isRedPlayer)
+                    slot.OwnerId = pComponent.netId;
+                else if (slot.AcceptsType == ItemType.Crystal_Blue && !pComponent.isRedPlayer)
+                    slot.OwnerId = pComponent.netId;
+            }
         }
 
         public override void OnServerConnect(NetworkConnection conn)
