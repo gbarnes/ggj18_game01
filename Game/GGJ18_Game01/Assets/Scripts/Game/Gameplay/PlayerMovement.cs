@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
     private bool _fuelRefillLocked;
     private AudioManager _audioManager;
     private Animator _animator;
-    private bool _firstPerson;
+    private bool _firstPerson = true;
     private bool _lockCam;
     private bool _leftShoulder;
     private float _up;
@@ -95,8 +95,10 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (value)
                     this.Cam.transform.localPosition = Vector3.zero;
+                else if(_leftShoulder)
+                    this.Cam.transform.localPosition = new Vector3(-1, 0, -3);
                 else
-                    this.Cam.transform.localPosition = new Vector3(-1,0,-3);
+                    this.Cam.transform.localPosition = new Vector3(1, 0, -3);
             }
             _firstPerson = value;
         }
