@@ -17,7 +17,7 @@ public class Player : NetworkBehaviour
 
     [SyncVar(hook = "OnCrystalsChanged")]
     public int Crystals = 0;
-
+    public MovementVisual visual;
     public GameObject CameraPrefab;
     public Material BluePlayerMaterial;
 
@@ -142,6 +142,10 @@ public class Player : NetworkBehaviour
 
         if(this.isClient)
             this.holdingItem = item;
+
+
+    
+        visual.showCrystal(item);
     }
 	
 	// Update is called once per frame

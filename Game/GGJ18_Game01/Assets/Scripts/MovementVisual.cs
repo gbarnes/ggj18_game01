@@ -6,12 +6,8 @@ using UnityEngine;
 public class MovementVisual : MonoBehaviour
 {
     
-    public float localX = 0.373f, localY = -0.214f, localZ = 0.416f;
-    public Vector3 crystalPos = new Vector3(0.373f, -0.214f, 0.416f);
-    public Vector3 nullPos = Vector3.down; //new Vector3(0.5f, -0.55f, 0.23f);
-    public bool animationRunning = false;
-    public float animationSpeed = 0.01f;
-    public float animationStep = 0.0f;
+    
+    public GameObject MeshObject;
     public Material RedMaterial;
     public Material BlueMaterial;
     public ItemType olditem = ItemType.None;
@@ -20,7 +16,6 @@ public class MovementVisual : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        nullPos = new Vector3(0.33f, -0.565f, 0.519f);
         _player = Locator.Get<Player>();
     }
 	
@@ -30,7 +25,7 @@ public class MovementVisual : MonoBehaviour
         if(_player == null)
             _player = Locator.Get<Player>();
 
-        ItemType currItem = _player.holdingItem;
+       /* ItemType currItem = _player.holdingItem;
         if(olditem != currItem) showCrystal(currItem);
         if (animationRunning)
         {
@@ -84,25 +79,26 @@ public class MovementVisual : MonoBehaviour
         */
     }
 
-    void showCrystal(ItemType item)
+    public void showCrystal(ItemType item)
     {
         if (item == ItemType.Crystal_Blue && item != olditem && item != ItemType.Crystal_Red)
         {
             olditem = item;
+            MeshObject.SetActive(true);
             this.GetComponentInChildren<Renderer>().material = BlueMaterial;
-            animationRunning = true;
         }
         else if(item == ItemType.Crystal_Red && item != olditem && item != ItemType.Crystal_Blue)
         {
             olditem = item;
+            MeshObject.SetActive(true);
             this.GetComponentInChildren<Renderer>().material= RedMaterial;
-            animationRunning = true;
+            
         }
         else if (item == ItemType.None && item != olditem)
         {
             olditem = item;
-            animationRunning = true;
-         
+            MeshObject.SetActive(false);
+
         }
     }
 
