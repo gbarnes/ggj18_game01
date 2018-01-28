@@ -11,10 +11,13 @@ public class UIHudComponent : MonoBehaviour {
     public GameObject reticuleDot;
     public GameObject reticuleRing;
     public GameObject fuelMeter;
+    public Image crystalIndicator;
 
     [Header("Signal Indicators")]
     public GameObject signalIndicatorRed;
+    public GameObject signalRippleRed;
     public GameObject signalIndicatorBlue;
+    public GameObject signalRippleBlue;
     public Sprite spriteSignalNone;
     public Sprite spriteSignalRed1;
     public Sprite spriteSignalRed2;
@@ -22,11 +25,13 @@ public class UIHudComponent : MonoBehaviour {
     public Sprite spriteSignalBlue1;
     public Sprite spriteSignalBlue2;
     public Sprite spriteSignalBlue3;
-    public Image crystalIndicator;
-
+    
     private PlayerMovement movement;
     private int signalRed = 0;
     private int signalBlue = 0;
+
+    private float rippleAlphaRed = 1;
+    private float rippleAlphaBlue = 1;
 
     // Use this for initialization
     void Start () {
@@ -67,6 +72,7 @@ public class UIHudComponent : MonoBehaviour {
                     signalIndicatorBlue.GetComponent<Image>().sprite = spriteSignalBlue3;
                     break;
             }
+            rippleAlphaBlue = 0;
         }
         else
         {
@@ -85,6 +91,7 @@ public class UIHudComponent : MonoBehaviour {
                     signalIndicatorRed.GetComponent<Image>().sprite = spriteSignalRed3;
                     break;
             }
+            rippleAlphaRed = 0;
         }
     }
 
@@ -119,6 +126,24 @@ public class UIHudComponent : MonoBehaviour {
             fuelMeter.GetComponent<Slider>().value = movement.Fuel;
         } else {
             movement = Locator.Get<PlayerMovement>();
+        }
+
+        // ---
+
+        if(rippleAlphaRed < 1)
+        {
+            rippleAlphaRed += Time.deltaTime * 4;
+
+            signalRippleRed.GetComponent<Image>().color = new Color(1, 1, 1, 1 - rippleAlphaRed);
+            signalRippleRed.transform.localScale = Vector3.Lerp(new Vector3(1,1,1), new Vector3(6,6,6), rippleAlphaRed);
+        }
+
+        if (rippleAlphaBlue < 1)
+        {
+            rippleAlphaBlue += Time.deltaTime * 4;
+
+            signalRippleBlue.GetComponent<Image>().color = new Color(1, 1, 1, 1 - rippleAlphaBlue);
+            signalRippleBlue.transform.localScale = Vector3.Lerp(new Vector3(1, 1, 1), new Vector3(6, 6, 6), rippleAlphaBlue);
         }
     }
 }
