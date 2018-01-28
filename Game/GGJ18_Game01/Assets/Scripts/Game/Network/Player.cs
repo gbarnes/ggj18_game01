@@ -88,6 +88,15 @@ public class Player : NetworkBehaviour
             camera.tag = "MainCamera";
             Locator.Register<PlayerMovement>(movement);
         }
+
+        if (isServer) // host runs
+        {
+            transform.position = new Vector3(-42.25265f, 90.01147f, -4.957952f);
+        }
+        else if (isClient) // client runs
+        {
+            transform.position = new Vector3(40.62504f, 90.62834f, -8.43356f);
+        }
     }
 
     void OnHoldingItemChanged(ItemType item)
@@ -155,8 +164,10 @@ public class Player : NetworkBehaviour
 
         if (stash.Item != ItemType.None)
         {
+            ItemType priorHoldingItem = this.holdingItem;
+
             this.holdingItem = stash.Item;
-            stash.ChangeItem(ItemType.None);
+            stash.ChangeItem(priorHoldingItem);
         }
         else
         {
