@@ -117,7 +117,7 @@ public class PlayerMovement : MonoBehaviour
         this._animator = GetComponent<Animator>();
     }
 
-    public void CustomUpdate()
+    public void FixedUpdate()
     {
         if (Input.GetButtonDown("ToggleView") && !_lockCam)
             this.FirstPerson = !_firstPerson;
@@ -138,16 +138,16 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_usingJetpack || _sprinting)
         {
-            Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, ThrustPitch, Time.deltaTime);
+            Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, ThrustPitch, Time.fixedDeltaTime);
             if (_usingJetpack)
             {
-                this.Fuel -= this.FuelDrain * Time.deltaTime;
+                this.Fuel -= this.FuelDrain * Time.fixedDeltaTime;
                 if (this.Fuel < 0)
                     StartCoroutine(LockFuelUsage());
             }
             if (_sprinting)
             {
-                this.Fuel -= this.SprintDrain * Time.deltaTime;
+                this.Fuel -= this.SprintDrain * Time.fixedDeltaTime;
                 if (this.Fuel < 0)
                     StartCoroutine(LockFuelUsage());
             }
@@ -157,8 +157,8 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             if (this.Fuel < 100 && !_fuelRefillLocked)
-                this.Fuel += this.FuelRefill * Time.deltaTime;
-            Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, WalkPitch, Time.deltaTime);
+                this.Fuel += this.FuelRefill * Time.fixedDeltaTime;
+            Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, WalkPitch, Time.fixedDeltaTime);
 
             Jetpack.volume = 0.25f;
             //_audioManager.SetJetpack(false);
@@ -206,7 +206,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (Input.GetButton("Jump") && !_fuelUsingLocked)
             {
-                this._up = Mathf.Min(this._up + Time.deltaTime * 2, Thrust);
+                this._up = Mathf.Min(this._up + Time.fixedDeltaTime * 2, Thrust);
                 this._rig.velocity -= _gravity * Thrust;
                 _usingJetpack = true;
                 //return;
@@ -217,7 +217,7 @@ public class PlayerMovement : MonoBehaviour
 
         if(!this._usingJetpack && this._up > 0)
         {
-            this._up = Mathf.Max(this._up - Time.deltaTime * 2, 0);
+            this._up = Mathf.Max(this._up - Time.fixedDeltaTime * 2, 0);
         }
 
         if (InvertedY)
@@ -247,12 +247,12 @@ public class PlayerMovement : MonoBehaviour
         if (!this._usingJetpack && !this._sprinting)
         {
             if (speed.magnitude > Threshold)
-                Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, WalkPitch, Time.deltaTime);
+                Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, WalkPitch, Time.fixedDeltaTime);
             else
-                Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, IdlePitch, Time.deltaTime);
+                Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, IdlePitch, Time.fixedDeltaTime);
         }
 
-        _surfaceCheckTimer += Time.deltaTime;
+        _surfaceCheckTimer += Time.fixedDeltaTime;
         if(_surfaceCheckTimer>SurfaceCheckFreq)
         {
             RaycastHit hitInfo;
