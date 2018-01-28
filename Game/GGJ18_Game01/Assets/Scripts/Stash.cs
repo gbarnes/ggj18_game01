@@ -22,7 +22,7 @@ public class Stash : InteractableObject {
         //if(this.isLocalPlayer)
         //{
             ItemSpawnManager itemManager = Locator.Get<ItemSpawnManager>();
-            if (Item == ItemType.None)
+            if (item == ItemType.None)
             {
                 itemManager.StashesWithCrystals.Remove(this);
             }
