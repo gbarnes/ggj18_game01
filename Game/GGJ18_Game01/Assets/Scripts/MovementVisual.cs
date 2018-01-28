@@ -77,13 +77,13 @@ public class MovementVisual : MonoBehaviour {
         if (item == ItemType.Crystal_Blue && item != olditem && item != ItemType.Crystal_Red)
         {
             olditem = item;
-            GetComponent<Renderer>().material.SetColor("_Color", new Color(0, 0, 1));
+           // GetComponent<Renderer>().material.SetColor("_Color", new Color(0, 0, 1));
             animationRunning = true;
         }
     else if(item == ItemType.Crystal_Red && item != olditem && item != ItemType.Crystal_Blue)
         {
             olditem = item;
-            GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 0, 0));
+           // GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 0, 0));
             animationRunning = true;
         }
     else if (item == ItemType.None && item != olditem)
