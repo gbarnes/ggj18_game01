@@ -23,6 +23,7 @@ public class Player : NetworkBehaviour
 
     private GameSimulationManager sim;
     private PlayerMovement movement;
+    private Animator _animator;
 
     [SyncVar(hook = "OnHoldingItemChanged")]
     public ItemType holdingItem = ItemType.None;
@@ -76,6 +77,7 @@ public class Player : NetworkBehaviour
         base.OnStartLocalPlayer();
         GetComponent<NetworkAnimator>().SetParameterAutoSend(0, true);
         GetComponent<NetworkAnimator>().SetParameterAutoSend(1, true);
+        GetComponent<NetworkAnimator>().SetParameterAutoSend(2, true);
     }
 
     public override void PreStartClient()
@@ -83,11 +85,13 @@ public class Player : NetworkBehaviour
         base.PreStartClient();
         GetComponent<NetworkAnimator>().SetParameterAutoSend(0, true);
         GetComponent<NetworkAnimator>().SetParameterAutoSend(1, true);
+        GetComponent<NetworkAnimator>().SetParameterAutoSend(2, true);
     }
     // Use this for initialization
     void Start () {
         movement = GetComponent<PlayerMovement>();
         LevelGenerator generator = Locator.Get<LevelGenerator>();
+        this._animator = GetComponent<Animator>();
 
         if (isLocalPlayer)
         {
@@ -142,10 +146,9 @@ public class Player : NetworkBehaviour
 
         if(this.isClient)
             this.holdingItem = item;
-
-
-    
-        visual.showCrystal(item);
+        
+        this._animator.SetLayerWeight(1, visual.showCrystal(item) ? 1 : 0);
+        
     }
 	
 	// Update is called once per frame

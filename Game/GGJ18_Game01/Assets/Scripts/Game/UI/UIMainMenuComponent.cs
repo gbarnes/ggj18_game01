@@ -15,8 +15,10 @@ namespace GGJ_G01.Game.UI
     {
         public Button StartServerBtn;
         public Button StartClientBtn;
+        public Button CreditBtn;
         public InputField IPAddressTxt;
         public Text ContinueText;
+        private bool initialKeyDown = false;
         public GameObject OutsidePanel;
 
         private void Start()
@@ -33,14 +35,20 @@ namespace GGJ_G01.Game.UI
                 networkManager.networkAddress = IPAddressTxt.text;
                 networkManager.StartClient();
             });
+
+            CreditBtn.onClick.AddListener(() =>
+            {
+                Observer.Trigger(CommandType.UI_OpenCredits);
+            });
         }
 
         private void Update()
         {
-            if(Input.anyKeyDown)
+            if(Input.anyKeyDown && !initialKeyDown)
             {
                 OutsidePanel.SetActive(true);
                 ContinueText.gameObject.SetActive(false);
+                initialKeyDown = true;
             }
         }
     }
