@@ -54,6 +54,8 @@ public class Player : NetworkBehaviour
             // WINN!!!!
             RpcGameOver(isRedPlayer);
         }
+
+        Observer.Trigger(CommandType.UI_SignalChanged, Crystals, isRedPlayer);
     }
 
     [ClientRpc]

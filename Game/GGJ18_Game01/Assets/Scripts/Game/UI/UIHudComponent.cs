@@ -30,7 +30,7 @@ public class UIHudComponent : MonoBehaviour {
     // Use this for initialization
     void Start () {
         Observer.Subscribe(CommandType.UI_SignalChanged, (Action<int, bool>)OnUpdateSignalIndicator);
-        movement = Locator.Get<PlayerMovement>();
+     //   movement = Locator.Get<PlayerMovement>();
 	}
 
     public void OnUpdateSignalIndicator(int signal, bool isRed)
