@@ -175,6 +175,7 @@ public class Player : NetworkBehaviour
                 if (tempObj is Stash)
                 {
                     Stash tempStash = (Stash)tempObj;
+
                     if (tempStash.Item == ItemType.None && this.holdingItem == ItemType.None)
                         Observer.Trigger(CommandType.UI_ShowNotification);
 
@@ -185,6 +186,7 @@ public class Player : NetworkBehaviour
                 else if(tempObj is StationSlot)
                 {
                     StationSlot tempStation = (StationSlot)tempObj;
+
                     if (!tempStation.IsFilled && this.holdingItem == ItemType.None)
                         Observer.Trigger(CommandType.UI_ShowNotification);
 
