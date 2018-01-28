@@ -19,6 +19,7 @@ public class Player : NetworkBehaviour
     public int Crystals = 0;
 
     public GameObject CameraPrefab;
+    public Material BluePlayerMaterial;
 
     private GameSimulationManager sim;
     private PlayerMovement movement;
@@ -86,7 +87,7 @@ public class Player : NetworkBehaviour
             sim = Locator.Get<GameSimulationManager>();
             GameObject camera = GameObject.Instantiate(CameraPrefab, Vector3.zero, Quaternion.identity);
             camera.transform.parent = this.transform;
-            camera.transform.localPosition = new Vector3(0.0f, 0.8000031f, 0.0f);
+            camera.transform.localPosition = new Vector3(0.0f, 1.0f, 0.0f);
             movement.Cam = camera.GetComponent<Camera>();
             camera.tag = "MainCamera";
             Locator.Register<PlayerMovement>(movement);
@@ -99,6 +100,11 @@ public class Player : NetworkBehaviour
         else if (isClient) // client runs
         {
             transform.position = new Vector3(40.62504f, 90.62834f, -8.43356f);
+        }
+
+        if (!isRedPlayer && BluePlayerMaterial != null)
+        {
+            GetComponentInChildren<SkinnedMeshRenderer>().material = BluePlayerMaterial;
         }
     }
 
