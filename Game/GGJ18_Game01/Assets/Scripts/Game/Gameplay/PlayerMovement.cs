@@ -34,8 +34,12 @@ public class PlayerMovement : MonoBehaviour
     public float WalkPitch;
     public float ThrustPitch;
     public float Threshold;
+    public float SurfaceCheckFreq = 0.5f;
+
+    public Vector3 SurfaceNormal;
     public AudioSource Jetpack;
 
+    private float _surfaceCheckTimer;
     private Rigidbody _rig;
     private Vector3 _gravity;
     private bool _usingJetpack;
@@ -44,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
     private bool _fuelRefillLocked;
     private AudioManager _audioManager;
     private Animator _animator;
-    private bool _firstPerson;
+    private bool _firstPerson = true;
     private bool _lockCam;
     private bool _leftShoulder;
     private float _up;
@@ -95,8 +99,10 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (value)
                     this.Cam.transform.localPosition = Vector3.zero;
+                else if(_leftShoulder)
+                    this.Cam.transform.localPosition = new Vector3(-1, 0, -3);
                 else
-                    this.Cam.transform.localPosition = new Vector3(-1,0,-3);
+                    this.Cam.transform.localPosition = new Vector3(1, 0, -3);
             }
             _firstPerson = value;
         }
@@ -246,8 +252,22 @@ public class PlayerMovement : MonoBehaviour
                 Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, IdlePitch, Time.deltaTime);
         }
 
+        _surfaceCheckTimer += Time.deltaTime;
+        if(_surfaceCheckTimer>SurfaceCheckFreq)
+        {
+            RaycastHit hitInfo;
+            if(Physics.Raycast(this.transform.position+this.transform.up,-this.transform.up, out hitInfo))
+            {
+                this.SurfaceNormal = hitInfo.normal;
+            }
+        }
+
         if (this._rig.velocity.magnitude < MaxSpeed)
-            this._rig.velocity += (this._sprinting? SprintBoost:1) * speed;
+        {
+            speed = Quaternion.Euler(-this.SurfaceNormal) * speed;//FromToRotation(this.SurfaceNormal, transform.up)
+            this._rig.velocity += (this._sprinting ? SprintBoost : 1) * speed;
+        }
+            
        
         UpdateAnimator(movementInputVector.x, movementInputVector.y, this._up);
     }
