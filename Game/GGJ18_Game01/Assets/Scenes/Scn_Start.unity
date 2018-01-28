@@ -336,13 +336,14 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 1678334019194348, guid: 777452a15e17e64408741fd7863882a4, type: 2}
-      propertyPath: m_IsActive
+    - target: {fileID: 224584211518422282, guid: 777452a15e17e64408741fd7863882a4,
+        type: 2}
+      propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1216551784259990, guid: 777452a15e17e64408741fd7863882a4, type: 2}
+    - target: {fileID: 1678334019194348, guid: 777452a15e17e64408741fd7863882a4, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 777452a15e17e64408741fd7863882a4, type: 2}
