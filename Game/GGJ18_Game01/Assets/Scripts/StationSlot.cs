@@ -65,10 +65,11 @@ public class StationSlot : InteractableObject
             IsFilled = true;
             p.holdingItem = ItemType.None;
 
-            if (this.AcceptsType == ItemType.Crystal_Red && p.isRedPlayer)
-                OwnerId = p.netId;
-            else if (this.AcceptsType == ItemType.Crystal_Blue && !p.isRedPlayer)
-                OwnerId = p.netId;
+            if(OwnerId.Value == 0)
+            {
+                FindOwner();
+            }
+
 
             GameObject goP = NetworkServer.FindLocalObject(OwnerId);
             if(goP != null)
@@ -83,6 +84,24 @@ public class StationSlot : InteractableObject
             if (goP != null)
                 goP.GetComponent<Player>().ChangeCrystalsInPosession(-1);
             return;
+        }
+
+        
+    }
+
+    void FindOwner()
+    {
+        if (!isServer)
+            return;
+
+        Player[] players = GameObject.FindObjectsOfType<Player>();
+        for (int i = 0; i < players.Length; i++)
+        {
+            Player p = players[i];
+            if (this.AcceptsType == ItemType.Crystal_Red && p.isRedPlayer)
+                OwnerId = p.netId;
+            else if (this.AcceptsType == ItemType.Crystal_Blue && !p.isRedPlayer)
+                OwnerId = p.netId;
         }
     }
 }

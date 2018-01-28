@@ -176,8 +176,8 @@ public class Player : NetworkBehaviour
             {
                 CmdChangeColor();
             }
-            if (Input.GetKeyDown(KeyCode.Mouse0)) clickedtoHideCursor();
-            if (Input.GetKeyDown(KeyCode.Escape)) escapeToShowCursor();
+           // if (Input.GetKeyDown(KeyCode.Mouse0)) clickedtoHideCursor();
+           // if (Input.GetKeyDown(KeyCode.Escape)) escapeToShowCursor();
         }
     }
 
