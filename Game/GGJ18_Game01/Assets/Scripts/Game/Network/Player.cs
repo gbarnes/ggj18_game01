@@ -54,6 +54,8 @@ public class Player : NetworkBehaviour
             // WINN!!!!
             RpcGameOver(isRedPlayer);
         }
+
+        Observer.Trigger(CommandType.UI_SignalChanged, Crystals, isRedPlayer);
     }
 
     [ClientRpc]
@@ -130,12 +132,14 @@ public class Player : NetworkBehaviour
     {
         Debug.Log("[Player] Holding item changed.");
 
+        /*
         if (item == ItemType.Crystal_Blue)
             GetComponent<Renderer>().material.SetColor("_Color", new Color(0, 0, 1));
         else if (item == ItemType.Crystal_Red)
             GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 0, 0));
         else
             GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 1, 1));
+            */
 
         if(this.isClient)
             this.holdingItem = item;
