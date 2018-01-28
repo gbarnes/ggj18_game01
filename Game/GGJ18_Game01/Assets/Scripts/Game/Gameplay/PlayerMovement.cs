@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     public float SensitivityY = 10;
     public float ClampMin = -300;
     public float ClampMax = 300;
+    public Transform CameraContainer;
     public Camera Cam;
     public float Angle;
 
@@ -43,6 +44,63 @@ public class PlayerMovement : MonoBehaviour
     private bool _fuelRefillLocked;
     private AudioManager _audioManager;
     private Animator _animator;
+    private bool _firstPerson;
+    private bool _lockCam;
+    private bool _leftShoulder;
+    private float _up;
+    public float LerpTime = 1;
+
+    private bool LeftShoulder
+    {
+        get
+        {
+            return _leftShoulder;
+        }
+        set
+        {
+            if(_leftShoulder != value && !_lockCam)
+            {
+                StartCoroutine(LerpCam(value? -1:1));
+            }
+            _leftShoulder = value;
+        }
+    }
+
+    IEnumerator LerpCam(float zDistance)
+    {
+        _lockCam = true;
+        var wait = new WaitForEndOfFrame();
+        float timer = 0;
+        while (timer <= LerpTime)
+        {
+            timer += Time.deltaTime;
+            float xOffset = this.Cam.transform.localPosition.x;
+            xOffset = Mathf.Lerp(xOffset, zDistance, timer / LerpTime);
+            this.Cam.transform.localPosition = new Vector3(xOffset,0,-3);
+            yield return wait;
+        }
+        _lockCam = false;
+        yield return null;
+    }
+
+    private bool FirstPerson
+    {
+        get
+        {
+            return _firstPerson;
+        }
+        set
+        {
+            if(_firstPerson != value)
+            {
+                if (value)
+                    this.Cam.transform.localPosition = Vector3.zero;
+                else
+                    this.Cam.transform.localPosition = new Vector3(-1,0,-3);
+            }
+            _firstPerson = value;
+        }
+    }
 
     void Start()
     {
@@ -55,6 +113,14 @@ public class PlayerMovement : MonoBehaviour
 
     public void CustomUpdate()
     {
+        if (Input.GetButtonDown("ToggleView") && !_lockCam)
+            this.FirstPerson = !_firstPerson;
+
+        if (Input.GetButtonDown("RightShoulder") && !_lockCam)
+            this.LeftShoulder = false;
+        else if (Input.GetButtonDown("LeftShoulder") && !_lockCam)
+            this.LeftShoulder = true;
+
         ApplyMovement();
         UpdateFuel();
         _gravity = -this.transform.position.normalized * Gravity;
@@ -100,9 +166,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void ApplyMovement()
     {
+        //new Vector3(-1.0f, 0.0f, -3.0f);
         Vector2 movementInputVector;
-        Vector2 aimInputVector;
-        float up = 0;
+        Vector2 aimInputVector;        
 
         if (ControllerOn)
         {
@@ -113,7 +179,7 @@ public class PlayerMovement : MonoBehaviour
             movementInputVector.y = Input.GetAxis("HorizontalLeft");
             if(Mathf.Abs(Input.GetAxis("TriggerAxis"))> 0.1f && !_fuelUsingLocked)
             {
-                up = Thrust * Input.GetAxis("TriggerAxis");
+                this._up = Thrust * Input.GetAxis("TriggerAxis");
                 this._rig.velocity -= _gravity * Thrust * Input.GetAxis("TriggerAxis");
                 _usingJetpack = true;
             }
@@ -131,7 +197,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (Input.GetButton("Jump") && !_fuelUsingLocked)
             {
-                up = Thrust;
+                this._up = Mathf.Min(this._up + Time.deltaTime * 2, Thrust);
                 this._rig.velocity -= _gravity * Thrust;
                 _usingJetpack = true;
                 //return;
@@ -139,6 +205,12 @@ public class PlayerMovement : MonoBehaviour
             else
                 _usingJetpack = false;
         }
+
+        if(!this._usingJetpack && this._up > 0)
+        {
+            this._up = Mathf.Max(this._up - Time.deltaTime * 2, 0);
+        }
+
         if (InvertedY)
             aimInputVector.y *= -1;
 
@@ -147,12 +219,14 @@ public class PlayerMovement : MonoBehaviour
         Quaternion yRot = Quaternion.AngleAxis(aimInputVector.x * SensitivityY, Vector3.up);
 
         this.transform.localRotation *= yRot;
-        Angle = Vector3.SignedAngle(transform.forward, Cam.transform.forward, -transform.right);
+        Angle = Vector3.SignedAngle(transform.forward, CameraContainer.transform.forward, -transform.right);
 
         if ((Angle > ClampMin && aimInputVector.y < 0) || (Angle < ClampMax && aimInputVector.y > 0))
         {
             Quaternion xRot = Quaternion.AngleAxis(aimInputVector.y * SensitivityX, Vector3.left);
-            Cam.transform.localRotation *= xRot;
+
+            CameraContainer.transform.localRotation *= xRot;
+            //Cam.transform.localRotation *= xRot;
         }
         var currentSpeed = _rig.velocity;
         Vector3 speed = Vector3.zero;
@@ -169,7 +243,7 @@ public class PlayerMovement : MonoBehaviour
         if (this._rig.velocity.magnitude < MaxSpeed)
             this._rig.velocity += (this._sprinting? SprintBoost:1) * speed;
        
-        UpdateAnimator(movementInputVector.x, movementInputVector.y, up);
+        UpdateAnimator(movementInputVector.x, movementInputVector.y, this._up);
     }
 
     private void UpdateAnimator(float forward, float turn, float up)

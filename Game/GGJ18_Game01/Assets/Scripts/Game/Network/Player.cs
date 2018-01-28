@@ -105,9 +105,17 @@ public class Player : NetworkBehaviour
         {
            
             sim = Locator.Get<GameSimulationManager>();
+            
+            GameObject cameraContainer = new GameObject("CamContainer");
+
+            cameraContainer.transform.parent = this.transform;
+            cameraContainer.transform.localPosition = new Vector3(0.0f, 1.0f, 0.0f);
+
             GameObject camera = GameObject.Instantiate(CameraPrefab, Vector3.zero, Quaternion.identity);
-            camera.transform.parent = this.transform;
-            camera.transform.localPosition = new Vector3(0.0f, 1.0f, 0.0f);
+            camera.transform.SetParent(cameraContainer.transform);
+            camera.transform.localPosition = Vector3.zero;
+
+            movement.CameraContainer = cameraContainer.transform;
             movement.Cam = camera.GetComponent<Camera>();
             camera.tag = "MainCamera";
             Locator.Register<PlayerMovement>(movement);
