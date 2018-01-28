@@ -63,7 +63,19 @@ public class Player : NetworkBehaviour
         }
     }
 
-    
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
+        GetComponent<NetworkAnimator>().SetParameterAutoSend(0, true);
+        GetComponent<NetworkAnimator>().SetParameterAutoSend(1, true);
+    }
+
+    public override void PreStartClient()
+    {
+        base.PreStartClient();
+        GetComponent<NetworkAnimator>().SetParameterAutoSend(0, true);
+        GetComponent<NetworkAnimator>().SetParameterAutoSend(1, true);
+    }
     // Use this for initialization
     void Start () {
         movement = GetComponent<PlayerMovement>();
