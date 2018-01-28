@@ -47,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
     private bool _firstPerson;
     private bool _lockCam;
     private bool _leftShoulder;
+    private float _up;
     public float LerpTime = 1;
 
     private bool LeftShoulder
@@ -167,8 +168,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //new Vector3(-1.0f, 0.0f, -3.0f);
         Vector2 movementInputVector;
-        Vector2 aimInputVector;
-        float up = 0;
+        Vector2 aimInputVector;        
 
         if (ControllerOn)
         {
@@ -179,7 +179,7 @@ public class PlayerMovement : MonoBehaviour
             movementInputVector.y = Input.GetAxis("HorizontalLeft");
             if(Mathf.Abs(Input.GetAxis("TriggerAxis"))> 0.1f && !_fuelUsingLocked)
             {
-                up = Thrust * Input.GetAxis("TriggerAxis");
+                this._up = Thrust * Input.GetAxis("TriggerAxis");
                 this._rig.velocity -= _gravity * Thrust * Input.GetAxis("TriggerAxis");
                 _usingJetpack = true;
             }
@@ -197,7 +197,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (Input.GetButton("Jump") && !_fuelUsingLocked)
             {
-                up = Thrust;
+                this._up = Mathf.Min(this._up + Time.deltaTime * 2, Thrust);
                 this._rig.velocity -= _gravity * Thrust;
                 _usingJetpack = true;
                 //return;
@@ -205,6 +205,12 @@ public class PlayerMovement : MonoBehaviour
             else
                 _usingJetpack = false;
         }
+
+        if(!this._usingJetpack && this._up > 0)
+        {
+            this._up = Mathf.Max(this._up - Time.deltaTime * 2, 0);
+        }
+
         if (InvertedY)
             aimInputVector.y *= -1;
 
@@ -237,7 +243,7 @@ public class PlayerMovement : MonoBehaviour
         if (this._rig.velocity.magnitude < MaxSpeed)
             this._rig.velocity += (this._sprinting? SprintBoost:1) * speed;
        
-        UpdateAnimator(movementInputVector.x, movementInputVector.y, up);
+        UpdateAnimator(movementInputVector.x, movementInputVector.y, this._up);
     }
 
     private void UpdateAnimator(float forward, float turn, float up)
