@@ -53,7 +53,11 @@ public class Player : NetworkBehaviour
         else if (Crystals == 3)
         {
             // WINN!!!!
-            RpcGameOver(isRedPlayer);
+            Player[] players = GameObject.FindObjectsOfType<Player>();
+            for (int i = 0; i < players.Length; i++)
+            {
+                players[i].RpcGameOver(isRedPlayer);
+            }
         }
 
         Observer.Trigger(CommandType.UI_SignalChanged, Crystals, isRedPlayer);

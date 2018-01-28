@@ -104,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        Locator.Register(this);
+        //Locator.Register(this);
         _rig = GetComponent<Rigidbody>();
         Cam = GetComponentInChildren<Camera>();
         _audioManager = GetComponent<AudioManager>();
