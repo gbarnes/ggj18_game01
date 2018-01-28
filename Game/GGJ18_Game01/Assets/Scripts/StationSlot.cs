@@ -48,6 +48,11 @@ public class StationSlot : InteractableObject
             IsFilled = true;
             p.holdingItem = ItemType.None;
 
+            if (this.AcceptsType == ItemType.Crystal_Red && p.isRedPlayer)
+                OwnerId = p.netId;
+            else if (this.AcceptsType == ItemType.Crystal_Blue && !p.isRedPlayer)
+                OwnerId = p.netId;
+
             GameObject goP = NetworkServer.FindLocalObject(OwnerId);
             if(goP != null)
                 goP.GetComponent<Player>().ChangeCrystalsInPosession(1);
