@@ -25,10 +25,12 @@ namespace GGJ_G01.Game.UI
             if (!scroll)
                 return;
 
-            RectTransform rect = CreditText.GetComponent<RectTransform>();
+            GameObject.Find("Audio Source").GetComponent<AudioSource>().Stop();
+                RectTransform rect = CreditText.GetComponent<RectTransform>();
             rect.localPosition += new Vector3(0.0f, 10.0f * Time.deltaTime, 0.0f);
             if(rect.localPosition.y >= 54.0f || Input.anyKeyDown)
             {
+                GameObject.Find("Audio Source").GetComponent<AudioSource>().Play();
                 rect.localPosition = new Vector3(0.0f, -234.2f, 0.0f);
                 ServerPanel.SetActive(true);
                 this.gameObject.SetActive(false);
