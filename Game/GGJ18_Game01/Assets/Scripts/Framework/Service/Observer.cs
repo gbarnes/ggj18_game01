@@ -29,7 +29,8 @@ namespace Framework.Service
         Game_HoldingItemChanged,
         UI_ShowGameOverScreen,
         UI_ShowNotification,
-        UI_SignalChanged
+        UI_SignalChanged,
+        UI_OpenCredits
     }
 
     /// <summary>
