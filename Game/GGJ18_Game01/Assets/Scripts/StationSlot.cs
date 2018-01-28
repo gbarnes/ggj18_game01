@@ -35,6 +35,9 @@ public class StationSlot : InteractableObject
         int currentStationPhase = StationAnimator.GetInteger("Phase");
         currentStationPhase += isFilled ? 1 : -1;
         StationAnimator.SetInteger("Phase", Mathf.Clamp(currentStationPhase, 0, 2));
+
+        if (isClient)
+            this.IsFilled = isFilled;
     }
 
 

@@ -9,6 +9,7 @@ public class ItemSpawnManager: NetworkBehaviour
 {
     public ItemSpawnLocation[] SpawnLocations;
     private List<Stash> _stashes;
+
     public List<Stash> StashesWithCrystals;
 
     // Use this for initialization
@@ -27,6 +28,16 @@ public class ItemSpawnManager: NetworkBehaviour
             AssignItemSpawnLocations();
             GenerateWorldObjects();
             DistributeCrystals();
+        }
+        else
+        {
+            Stash[] stashes = GameObject.FindObjectsOfType<Stash>();
+            for(int i = 0; i < stashes.Length; i++)
+            {
+                Stash stash = stashes[i];
+                if (stash.Item != ItemType.None)
+                    this.StashesWithCrystals.Add(stash);
+            }
         }
     }
     

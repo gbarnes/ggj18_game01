@@ -13,25 +13,35 @@ public enum ItemType
 
 public class Stash : InteractableObject {
 
-    [SyncVar]
+    [SyncVar(hook = "OnItemTypeChanged")]
     public ItemType Item;    
+
+
+    void OnItemTypeChanged(ItemType item)
+    {
+        //if(this.isLocalPlayer)
+        //{
+            ItemSpawnManager itemManager = Locator.Get<ItemSpawnManager>();
+            if (item == ItemType.None)
+            {
+                itemManager.StashesWithCrystals.Remove(this);
+            }
+            else
+            {
+                if (!itemManager.StashesWithCrystals.Contains(this))
+                {
+                    itemManager.StashesWithCrystals.Add(this);
+                }
+
+            }
+
+            if(this.isClient)
+                Item = item;
+        //}
+    }
 
     public void ChangeItem(ItemType newItem)
     {
         Item = newItem;
-
-        ItemSpawnManager itemManager = Locator.Get<ItemSpawnManager>();     
-        if (Item == ItemType.None)
-        {
-            itemManager.StashesWithCrystals.Remove(this);
-        }
-        else
-        {
-            if (!itemManager.StashesWithCrystals.Contains(this))
-            {
-                itemManager.StashesWithCrystals.Add(this);
-            }
-            
-        }        
     }    
 }

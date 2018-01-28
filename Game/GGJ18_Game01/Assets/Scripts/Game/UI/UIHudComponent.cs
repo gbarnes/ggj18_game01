@@ -79,7 +79,9 @@ public class UIHudComponent : MonoBehaviour {
     {
         RaycastHit hit;
         if (Camera.main == null)
+        {
             return;
+        }
 
         //Ray forwardRay = new Ray(Camera.main.transform.position, transform.forward);
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 5.0f, LayerMask.GetMask("Interaction")))
