@@ -1136,10 +1136,10 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: "<b>Credits</b>\n\n<size=16><b>Game Design</b>\n\nAlexander Romanjuk, Anh
     Minh Nguyen, Gavin Barnes, Felix Urbasik, Jan Brinkmann, Dominik R\xFCtt, Heico
-    Nachname</size>\n\n<size=16><b>Programming</b>\n\nAlexander Romanjuk, Anh Minh
-    Nguyen, Gavin Barnes, Felix Urbasik, Heico Nachname</size>\n\n<size=16><b>Art
-    (3D)</b>\n\nJan Brinkmann, Dominik R\xFCtt</size>\n\n<size=16><b>UI</b>\n\nFelix
-    Urbasik, Gavin Barnes</size>"
+    Jansen</size>\n\n<size=16><b>Programming</b>\n\nAlexander Romanjuk, Anh Minh Nguyen,
+    Gavin Barnes, Felix Urbasik, Heico Jansen</size>\n\n<size=16><b>Art (3D)</b>\n\nJan
+    Brinkmann, Dominik R\xFCtt</size>\n\n<size=16><b>UI</b>\n\nFelix Urbasik, Gavin
+    Barnes</size>"
 --- !u!222 &1029348160
 CanvasRenderer:
   m_ObjectHideFlags: 0

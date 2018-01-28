@@ -148,7 +148,9 @@ public class Player : NetworkBehaviour
             this.holdingItem = item;
         
         this._animator.SetLayerWeight(1, visual.showCrystal(item) ? 1 : 0);
-        
+
+        if(this.isLocalPlayer)
+            Observer.Trigger(CommandType.UI_HoldingItemChanged, this);
     }
 	
 	// Update is called once per frame
