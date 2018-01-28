@@ -15,10 +15,11 @@ public class Player : NetworkBehaviour
     [SyncVar]
     public bool isRedPlayer = true;
 
-    [SyncVar]
+    [SyncVar(hook = "OnCrystalsChanged")]
     public int Crystals = 0;
 
     public GameObject CameraPrefab;
+    public Material BluePlayerMaterial;
 
     private GameSimulationManager sim;
     private PlayerMovement movement;
@@ -32,9 +33,18 @@ public class Player : NetworkBehaviour
       
     }
 
+    public void OnCrystalsChanged(int crystals)
+    {
+        if (this.isClient)
+            Crystals = crystals;
+
+        Observer.Trigger(CommandType.UI_SignalChanged, Crystals, isRedPlayer);
+    }
+
     public void ChangeCrystalsInPosession(int value)
     {
         Crystals += value;
+
         if (Crystals < 0)
         {
             Crystals = 0;
@@ -59,7 +69,19 @@ public class Player : NetworkBehaviour
         }
     }
 
-    
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
+        GetComponent<NetworkAnimator>().SetParameterAutoSend(0, true);
+        GetComponent<NetworkAnimator>().SetParameterAutoSend(1, true);
+    }
+
+    public override void PreStartClient()
+    {
+        base.PreStartClient();
+        GetComponent<NetworkAnimator>().SetParameterAutoSend(0, true);
+        GetComponent<NetworkAnimator>().SetParameterAutoSend(1, true);
+    }
     // Use this for initialization
     void Start () {
         movement = GetComponent<PlayerMovement>();
@@ -83,7 +105,7 @@ public class Player : NetworkBehaviour
             sim = Locator.Get<GameSimulationManager>();
             GameObject camera = GameObject.Instantiate(CameraPrefab, Vector3.zero, Quaternion.identity);
             camera.transform.parent = this.transform;
-            camera.transform.localPosition = new Vector3(0.0f, 0.8000031f, 0.0f);
+            camera.transform.localPosition = new Vector3(0.0f, 1.0f, 0.0f);
             movement.Cam = camera.GetComponent<Camera>();
             camera.tag = "MainCamera";
             Locator.Register<PlayerMovement>(movement);
@@ -96,6 +118,11 @@ public class Player : NetworkBehaviour
         else if (isClient) // client runs
         {
             transform.position = new Vector3(40.62504f, 90.62834f, -8.43356f);
+        }
+
+        if (!isRedPlayer && BluePlayerMaterial != null)
+        {
+            GetComponentInChildren<SkinnedMeshRenderer>().material = BluePlayerMaterial;
         }
     }
 
