@@ -15,7 +15,7 @@ public class Player : NetworkBehaviour
     [SyncVar]
     public bool isRedPlayer = true;
 
-    [SyncVar]
+    [SyncVar(hook = "OnCrystalsChanged")]
     public int Crystals = 0;
 
     public GameObject CameraPrefab;
@@ -32,11 +32,17 @@ public class Player : NetworkBehaviour
       
     }
 
+    public void OnCrystalsChanged(int crystals)
+    {
+        if (this.isClient)
+            Crystals = crystals;
+
+        Observer.Trigger(CommandType.UI_SignalChanged, Crystals, isRedPlayer);
+    }
+
     public void ChangeCrystalsInPosession(int value)
     {
         Crystals += value;
-
-        Observer.Trigger(CommandType.UI_SignalChanged, Crystals, isRedPlayer);
 
         if (Crystals < 0)
         {
