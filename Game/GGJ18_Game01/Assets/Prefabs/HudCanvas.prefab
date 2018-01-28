@@ -281,8 +281,8 @@ MonoBehaviour:
   reticuleDot: {fileID: 1805526087758862}
   reticuleRing: {fileID: 1404283046633714}
   fuelMeter: {fileID: 1298093799808838}
-  signalIndicatorRed: {fileID: 0}
-  signalIndicatorBlue: {fileID: 0}
+  signalIndicatorRed: {fileID: 1454668481243196}
+  signalIndicatorBlue: {fileID: 1765946210295972}
   spriteSignalNone: {fileID: 21300000, guid: 1ec644d21b4d70f4d9954714bfd6e9b7, type: 3}
   spriteSignalRed1: {fileID: 21300000, guid: 911bb5425d28bca4e8bc99bd1776f207, type: 3}
   spriteSignalRed2: {fileID: 21300000, guid: 4c0d9a850122d8b4caed47e5298c8cd4, type: 3}

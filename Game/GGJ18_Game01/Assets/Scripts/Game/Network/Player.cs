@@ -15,7 +15,7 @@ public class Player : NetworkBehaviour
     [SyncVar]
     public bool isRedPlayer = true;
 
-    [SyncVar]
+    [SyncVar(hook = "OnCrystalsChanged")]
     public int Crystals = 0;
 
     public GameObject CameraPrefab;
@@ -33,11 +33,17 @@ public class Player : NetworkBehaviour
       
     }
 
+    public void OnCrystalsChanged(int crystals)
+    {
+        if (this.isClient)
+            Crystals = crystals;
+
+        Observer.Trigger(CommandType.UI_SignalChanged, Crystals, isRedPlayer);
+    }
+
     public void ChangeCrystalsInPosession(int value)
     {
         Crystals += value;
-
-        Observer.Trigger(CommandType.UI_SignalChanged, Crystals, isRedPlayer);
 
         if (Crystals < 0)
         {
@@ -48,6 +54,8 @@ public class Player : NetworkBehaviour
             // WINN!!!!
             RpcGameOver(isRedPlayer);
         }
+
+        Observer.Trigger(CommandType.UI_SignalChanged, Crystals, isRedPlayer);
     }
 
     [ClientRpc]
@@ -131,13 +139,6 @@ public class Player : NetworkBehaviour
     void OnHoldingItemChanged(ItemType item)
     {
         Debug.Log("[Player] Holding item changed.");
-
-        if (item == ItemType.Crystal_Blue)
-            GetComponent<Renderer>().material.SetColor("_Color", new Color(0, 0, 1));
-        else if (item == ItemType.Crystal_Red)
-            GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 0, 0));
-        else
-            GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 1, 1));
 
         if(this.isClient)
             this.holdingItem = item;

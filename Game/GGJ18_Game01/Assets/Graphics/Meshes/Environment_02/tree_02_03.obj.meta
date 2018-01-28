@@ -1,17 +1,22 @@
 fileFormatVersion: 2
-guid: 62239b9eebc698b488c0bb2405c96251
-timeCreated: 1517078278
+guid: 4be3b89a087ba12468c65cf7ed5a5dab
+timeCreated: 1517111635
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
   fileIDToRecycleName:
-    100000: default
-    100002: //RootNode
-    400000: default
-    400002: //RootNode
-    2300000: default
-    3300000: default
-    4300000: default
+    100000: //RootNode
+    100002: tree_02_03_Stick_tree_02_03
+    100004: tree_02_03_tree_02_03_tree
+    400000: //RootNode
+    400002: tree_02_03_Stick_tree_02_03
+    400004: tree_02_03_tree_02_03_tree
+    2300000: tree_02_03_Stick_tree_02_03
+    2300002: tree_02_03_tree_02_03_tree
+    3300000: tree_02_03_Stick_tree_02_03
+    3300002: tree_02_03_tree_02_03_tree
+    4300000: tree_02_03_Stick_tree_02_03
+    4300002: tree_02_03_tree_02_03_tree
   materials:
     importMaterials: 1
     materialName: 0
