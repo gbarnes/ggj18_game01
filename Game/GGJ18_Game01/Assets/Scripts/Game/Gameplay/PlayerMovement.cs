@@ -34,8 +34,12 @@ public class PlayerMovement : MonoBehaviour
     public float WalkPitch;
     public float ThrustPitch;
     public float Threshold;
+    public float SurfaceCheckFreq = 0.5f;
+
+    public Vector3 SurfaceNormal;
     public AudioSource Jetpack;
 
+    private float _surfaceCheckTimer;
     private Rigidbody _rig;
     private Vector3 _gravity;
     private bool _usingJetpack;
@@ -248,8 +252,22 @@ public class PlayerMovement : MonoBehaviour
                 Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, IdlePitch, Time.deltaTime);
         }
 
+        _surfaceCheckTimer += Time.deltaTime;
+        if(_surfaceCheckTimer>SurfaceCheckFreq)
+        {
+            RaycastHit hitInfo;
+            if(Physics.Raycast(this.transform.position+this.transform.up,-this.transform.up, out hitInfo))
+            {
+                this.SurfaceNormal = hitInfo.normal;
+            }
+        }
+
         if (this._rig.velocity.magnitude < MaxSpeed)
-            this._rig.velocity += (this._sprinting? SprintBoost:1) * speed;
+        {
+            speed = Quaternion.Euler(-this.SurfaceNormal) * speed;//FromToRotation(this.SurfaceNormal, transform.up)
+            this._rig.velocity += (this._sprinting ? SprintBoost : 1) * speed;
+        }
+            
        
         UpdateAnimator(movementInputVector.x, movementInputVector.y, this._up);
     }
