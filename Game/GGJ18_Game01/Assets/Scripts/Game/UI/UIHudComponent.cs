@@ -22,6 +22,7 @@ public class UIHudComponent : MonoBehaviour {
     public Sprite spriteSignalBlue1;
     public Sprite spriteSignalBlue2;
     public Sprite spriteSignalBlue3;
+    public Image crystalIndicator;
 
     private PlayerMovement movement;
     private int signalRed = 0;
@@ -30,8 +31,22 @@ public class UIHudComponent : MonoBehaviour {
     // Use this for initialization
     void Start () {
         Observer.Subscribe(CommandType.UI_SignalChanged, (Action<int, bool>)OnUpdateSignalIndicator);
-     //   movement = Locator.Get<PlayerMovement>();
-	}
+        Observer.Subscribe(CommandType.UI_HoldingItemChanged, (Action<Player>)OnHandleUpdateHoldingItem);
+        //   movement = Locator.Get<PlayerMovement>();
+    }
+
+    void OnHandleUpdateHoldingItem(Player player)
+    {
+       // if (player.isLocalPlayer)
+       // {
+            if (player.holdingItem == ItemType.None)
+                crystalIndicator.color = new Color(0.56f, 0.56f, 0.56f, 0.56f);
+            else if (player.holdingItem == ItemType.Crystal_Red)
+                crystalIndicator.color = new Color(0.89f, 0.0f, 0.0f, 1.0f);
+            else
+                crystalIndicator.color = new Color(0.0f, 0.26f, 0.89f, 1.0f);
+      //  }
+    }
 
     public void OnUpdateSignalIndicator(int signal, bool isRed)
     {
