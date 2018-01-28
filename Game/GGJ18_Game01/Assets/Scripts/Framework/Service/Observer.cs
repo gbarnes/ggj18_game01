@@ -28,7 +28,8 @@ namespace Framework.Service
         Save,
         Game_HoldingItemChanged,
         UI_ShowGameOverScreen,
-        UI_ShowNotification
+        UI_ShowNotification,
+        UI_SignalChanged
     }
 
     /// <summary>

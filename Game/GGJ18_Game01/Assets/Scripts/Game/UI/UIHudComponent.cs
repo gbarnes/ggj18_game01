@@ -1,5 +1,6 @@
 ﻿using Framework.Game.Manager;
 using Framework.Service;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,12 +12,67 @@ public class UIHudComponent : MonoBehaviour {
     public GameObject reticuleRing;
     public GameObject fuelMeter;
 
+    [Header("Signal Indicators")]
+    public GameObject signalIndicatorRed;
+    public GameObject signalIndicatorBlue;
+    public Sprite spriteSignalNone;
+    public Sprite spriteSignalRed1;
+    public Sprite spriteSignalRed2;
+    public Sprite spriteSignalRed3;
+    public Sprite spriteSignalBlue1;
+    public Sprite spriteSignalBlue2;
+    public Sprite spriteSignalBlue3;
+
     private PlayerMovement movement;
+    private int signalRed = 0;
+    private int signalBlue = 0;
 
     // Use this for initialization
     void Start () {
         movement = Locator.Get<PlayerMovement>();
+
+        Observer.Subscribe(CommandType.UI_SignalChanged, (Action<int, bool>)OnUpdateSignalIndicator);
 	}
+
+    public void OnUpdateSignalIndicator(int signal, bool isRed)
+    {
+        if(!isRed)
+        {
+            switch(signal)
+            {
+                case 0:
+                    signalIndicatorBlue.GetComponent<Image>().sprite = spriteSignalNone;
+                    break;
+                case 1:
+                    signalIndicatorBlue.GetComponent<Image>().sprite = spriteSignalBlue1;
+                    break;
+                case 2:
+                    signalIndicatorBlue.GetComponent<Image>().sprite = spriteSignalBlue2;
+                    break;
+                case 3:
+                    signalIndicatorBlue.GetComponent<Image>().sprite = spriteSignalBlue3;
+                    break;
+            }
+        }
+        else
+        {
+            switch (signal)
+            {
+                case 0:
+                    signalIndicatorRed.GetComponent<Image>().sprite = spriteSignalNone;
+                    break;
+                case 1:
+                    signalIndicatorRed.GetComponent<Image>().sprite = spriteSignalRed1;
+                    break;
+                case 2:
+                    signalIndicatorRed.GetComponent<Image>().sprite = spriteSignalRed2;
+                    break;
+                case 3:
+                    signalIndicatorRed.GetComponent<Image>().sprite = spriteSignalRed3;
+                    break;
+            }
+        }
+    }
 
     // Update is called once per frame
     void Update()

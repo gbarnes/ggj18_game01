@@ -35,6 +35,9 @@ public class Player : NetworkBehaviour
     public void ChangeCrystalsInPosession(int value)
     {
         Crystals += value;
+
+        Observer.Trigger(CommandType.UI_SignalChanged, Crystals, isRedPlayer);
+
         if (Crystals < 0)
         {
             Crystals = 0;
