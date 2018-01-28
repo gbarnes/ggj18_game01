@@ -102,6 +102,8 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 movementInputVector;
         Vector2 aimInputVector;
+        float up = 0;
+
         if (ControllerOn)
         {
             aimInputVector.y = Input.GetAxis("VerticalRight");
@@ -111,6 +113,7 @@ public class PlayerMovement : MonoBehaviour
             movementInputVector.y = Input.GetAxis("HorizontalLeft");
             if(Mathf.Abs(Input.GetAxis("TriggerAxis"))> 0.1f && !_fuelUsingLocked)
             {
+                up = Thrust * Input.GetAxis("TriggerAxis");
                 this._rig.velocity -= _gravity * Thrust * Input.GetAxis("TriggerAxis");
                 _usingJetpack = true;
             }
@@ -128,6 +131,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (Input.GetButton("Jump") && !_fuelUsingLocked)
             {
+                up = Thrust;
                 this._rig.velocity -= _gravity * Thrust;
                 _usingJetpack = true;
                 //return;
@@ -164,16 +168,17 @@ public class PlayerMovement : MonoBehaviour
 
         if (this._rig.velocity.magnitude < MaxSpeed)
             this._rig.velocity += (this._sprinting? SprintBoost:1) * speed;
-
-        UpdateAnimator(movementInputVector.x, movementInputVector.y);
+       
+        UpdateAnimator(movementInputVector.x, movementInputVector.y, up);
     }
 
-    private void UpdateAnimator(float forward, float turn)
+    private void UpdateAnimator(float forward, float turn, float up)
     {
         if(this._animator != null)
         {
             this._animator.SetFloat("Forward", forward);
             this._animator.SetFloat("Turn", turn);
+            this._animator.SetFloat("Up", up);
         }
     }
 
