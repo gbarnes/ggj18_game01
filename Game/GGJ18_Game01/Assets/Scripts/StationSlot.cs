@@ -13,6 +13,13 @@ public class StationSlot : InteractableObject
 
     public ItemType AcceptsType = ItemType.Crystal_Blue;
     public Animator StationAnimator;
+    public AudioSource StationAudioSource;
+    public AudioSource MyAudioSource;
+
+    public AudioClip StationMovement;
+    public AudioClip AcceptCrystal;
+    public AudioClip GiveUpCrystal;
+
     private void Start()
     {
         if(isServer)
@@ -30,6 +37,16 @@ public class StationSlot : InteractableObject
         int currentStationPhase = StationAnimator.GetInteger("Phase");
         currentStationPhase += isFilled ? 1 : -1;
         StationAnimator.SetInteger("Phase", Mathf.Clamp(currentStationPhase, 0, 2));
+
+        if (MyAudioSource.isPlaying)
+            MyAudioSource.Stop();
+
+        MyAudioSource.PlayOneShot(isFilled ? AcceptCrystal : GiveUpCrystal);
+
+        if (StationAudioSource.isPlaying)
+            StationAudioSource.Stop();
+
+        StationAudioSource.PlayOneShot(StationMovement);
 
         if (isClient)
             this.IsFilled = isFilled;
