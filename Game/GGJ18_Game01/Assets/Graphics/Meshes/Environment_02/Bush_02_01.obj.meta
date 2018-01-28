@@ -1,17 +1,22 @@
 fileFormatVersion: 2
-guid: ce8e6748c2d85d94bbe78288e2a264c0
-timeCreated: 1517078280
+guid: 9ffdf798accb95849ab4dbc79d79ff6a
+timeCreated: 1517111635
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
   fileIDToRecycleName:
-    100000: default
-    100002: //RootNode
-    400000: default
-    400002: //RootNode
-    2300000: default
-    3300000: default
-    4300000: default
+    100000: //RootNode
+    100002: Bush_02_08_Bush
+    100004: Grass_Bush_02_08
+    400000: //RootNode
+    400002: Bush_02_08_Bush
+    400004: Grass_Bush_02_08
+    2300000: Bush_02_08_Bush
+    2300002: Grass_Bush_02_08
+    3300000: Bush_02_08_Bush
+    3300002: Grass_Bush_02_08
+    4300000: Bush_02_08_Bush
+    4300002: Grass_Bush_02_08
   materials:
     importMaterials: 1
     materialName: 0

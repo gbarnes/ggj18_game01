@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Framework.Service;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,14 +12,20 @@ public class MovementVisual : MonoBehaviour {
     public float animationSpeed = 0.01f;
     public float animationStep = 0.0f;
     public ItemType olditem = ItemType.None;
+
+    private Player _player;
 	// Use this for initialization
 	void Start () {
         nullPos = new Vector3(0.33f, -0.565f, 0.519f);
-	}
+        _player = Locator.Get<Player>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        ItemType currItem = this.transform.parent.parent.GetComponent<Player>().holdingItem;
+        if(_player == null)
+            _player = Locator.Get<Player>();
+
+        ItemType currItem = _player.holdingItem;
         if(olditem != currItem) showCrystal(currItem);
         if (animationRunning)
         {
