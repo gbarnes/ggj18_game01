@@ -50,6 +50,14 @@ namespace GGJ_G01.Game.UI
                 ContinueText.gameObject.SetActive(false);
                 initialKeyDown = true;
             }
+            if (IPAddressTxt.text != "" && Input.GetKeyDown(KeyCode.Return)) 
+            {
+                
+                CustomGameNetworkManager networkManager = Locator.Get<CustomGameNetworkManager>();
+                networkManager.networkAddress = IPAddressTxt.text;
+                networkManager.StartClient();
+                
+            }
         }
     }
 }
