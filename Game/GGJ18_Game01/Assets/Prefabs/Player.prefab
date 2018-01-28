@@ -910,9 +910,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 4b774aebc3a539747b3be184cc6be84c, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 42c48513ab5f4fa4dade051deefad8ed, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.08
+  m_Volume: 0.25
   m_Pitch: 0.8
   Loop: 1
   Mute: 0
@@ -968,7 +968,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -1048,7 +1048,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -1090,7 +1090,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 95514966263321156}
-  m_ParameterSendBits: 3
+  m_ParameterSendBits: 7
   param0: 
   param1: 
   param2: 
@@ -1259,11 +1259,11 @@ MonoBehaviour:
   FuelRefillCooldown: 1
   Fuel: 100
   SoundRatio: 1
-  AudioPitch: 0
-  IdlePitch: 0
-  WalkPitch: 0
-  ThrustPitch: 0
-  Threshold: 0
+  AudioPitch: 1
+  IdlePitch: 0.2
+  WalkPitch: 1
+  ThrustPitch: 1.15
+  Threshold: 2
   Jetpack: {fileID: 82007418646383164}
   LerpTime: 0.5
 --- !u!114 &114916468308144334

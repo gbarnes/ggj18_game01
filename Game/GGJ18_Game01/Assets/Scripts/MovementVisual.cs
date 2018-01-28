@@ -79,27 +79,30 @@ public class MovementVisual : MonoBehaviour
         */
     }
 
-    public void showCrystal(ItemType item)
+    public bool showCrystal(ItemType item)
     {
         if (item == ItemType.Crystal_Blue && item != olditem && item != ItemType.Crystal_Red)
         {
             olditem = item;
             MeshObject.SetActive(true);
             this.GetComponentInChildren<Renderer>().material = BlueMaterial;
+            return true;
         }
         else if(item == ItemType.Crystal_Red && item != olditem && item != ItemType.Crystal_Blue)
         {
             olditem = item;
             MeshObject.SetActive(true);
             this.GetComponentInChildren<Renderer>().material= RedMaterial;
-            
+            return true;
         }
         else if (item == ItemType.None && item != olditem)
         {
             olditem = item;
             MeshObject.SetActive(false);
-
+            return false;
         }
+
+        return false;
     }
 
     void hideCrystal()
