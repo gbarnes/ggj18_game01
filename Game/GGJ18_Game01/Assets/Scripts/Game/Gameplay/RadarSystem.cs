@@ -26,13 +26,19 @@ public class RadarSystem : MonoBehaviour {
     // Use this for initialization
     void Start () {
         _itemManager = Locator.Get<ItemSpawnManager>();
-        _radarAnim = RadarImg.GetComponent<Animator>();
+        _radarAnim = GetComponent<Animator>();
         
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        if(_radarAnim == null)
+        {
+            _radarAnim = GetComponent<Animator>();
+            return;
+        }
+
         if (!_radarAnim.isInitialized)
             _radarAnim.enabled = !_radarAnim.enabled;
         updateTimer += Time.fixedDeltaTime;
@@ -61,8 +67,13 @@ public class RadarSystem : MonoBehaviour {
     private void GetMinDistanceToObj()
     {
         ClosestDistance = Mathf.Infinity;
-        if (_itemManager == null || (PlayerObj == null && !GetPlayer()))
+
+
+        if (_itemManager == null || PlayerObj == null)
+        {
+            GetPlayer();
             return;
+        }
         
         var crystals = _itemManager.StashesWithCrystals;
         for(int i=0;i<crystals.Count;i++)
