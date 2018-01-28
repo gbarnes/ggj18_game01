@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: d31597a12a15cf44cbc11fd29f71e64f
+timeCreated: 1517141409
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 32
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Virgo 01
+  fontNames:
+  - Virgo
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
