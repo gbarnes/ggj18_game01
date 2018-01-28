@@ -100,6 +100,9 @@ public class Player : NetworkBehaviour
             GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 0, 0));
         else
             GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 1, 1));
+
+        if(this.isClient)
+            this.holdingItem = item;
     }
 	
 	// Update is called once per frame
