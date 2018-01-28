@@ -26,16 +26,6 @@ public class OrbitRotator : MonoBehaviour {
 
             obj.transform.position += Vector3.up * Random.Range(-10,10);
             rigs.Add(obj.GetComponent<Rigidbody>());
-
-
-            //var newForward = Vector3.Cross(obj.transform.position, Vector3.up);
-            
-            //obj.transform.rotation = Quaternion.LookRotation(newForward); // Quaternion.FromToRotation(newForward, obj.transform.forward) * transform.rotation;
-            //NpcMovement movement = obj.AddComponent<NpcMovement>();
-            //movement.Target = parent;
-            //movement.MaxSpeed = Speed;
-            //movement.RotationSpeed = RotSpeed;
-            //movement.PanicDistance = PanicRadius;
         }
     }
 
@@ -53,6 +43,5 @@ public class OrbitRotator : MonoBehaviour {
         {
             AddForce(rigs[i], Speed, Vector3.Cross(rigs[i].transform.position - this.transform.position, this.transform.up));
         }
-        //this.transform.rotation *= Quaternion.AngleAxis(Speed*Time.fixedDeltaTime, Vector3.up);
     }
 }
