@@ -19,8 +19,8 @@ public class Stash : InteractableObject {
 
     void OnItemTypeChanged(ItemType item)
     {
-        if(this.isLocalPlayer)
-        {
+        //if(this.isLocalPlayer)
+        //{
             ItemSpawnManager itemManager = Locator.Get<ItemSpawnManager>();
             if (Item == ItemType.None)
             {
@@ -34,7 +34,7 @@ public class Stash : InteractableObject {
                 }
 
             }
-        }
+        //}
     }
 
     public void ChangeItem(ItemType newItem)
