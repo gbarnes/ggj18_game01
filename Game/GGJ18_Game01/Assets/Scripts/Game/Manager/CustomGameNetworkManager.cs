@@ -112,12 +112,9 @@ namespace GGJ_G01.Game.Manager
 
                 //manager.Pause();
 #if UNITY_STANDALONE
-                if (waitForPlayers)
-                {
                     //Time.timeScale = 0;
-                    manager.GameOver = true;
-                    Observer.Trigger(CommandType.GameSession_InitializedServer);
-                }
+            manager.GameOver = true;
+            Observer.Trigger(CommandType.GameSession_InitializedServer);
 #endif
 
                 manager.ChangeState(GameplayState.Game);
