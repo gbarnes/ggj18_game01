@@ -56,10 +56,11 @@ namespace GGJ_G01.Game.Manager
 
             if (conn.hostId >= 0)
             {
+                NetworkManager.singleton.StopHost();    
                 Observer.Trigger(CommandType.GameSession_End);
                 DLog.Log("Player disconnected!");
                 //manager.Resume();
-                Time.timeScale = 0;
+                //Time.timeScale = 0;
             }
 
         }
@@ -103,18 +104,21 @@ namespace GGJ_G01.Game.Manager
                 Observer.Trigger(CommandType.GameSession_Start);
                 DLog.Log("Player connected!");
                 //manager.Resume();
-                Time.timeScale = 1;
+                manager.GameOver = false;
             }
             else
             {
 
 
                 //manager.Pause();
+#if UNITY_STANDALONE
                 if (waitForPlayers)
                 {
-                    Time.timeScale = 0;
+                    //Time.timeScale = 0;
+                    manager.GameOver = true;
                     Observer.Trigger(CommandType.GameSession_InitializedServer);
                 }
+#endif
 
                 manager.ChangeState(GameplayState.Game);
             }

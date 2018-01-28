@@ -146,12 +146,15 @@ public class PlayerMovement : MonoBehaviour
                     StartCoroutine(LockFuelUsage());
             }
             //_audioManager.SetJetpack(true);
+            Jetpack.volume = 0.5f;
         }
         else
         {
             if (this.Fuel < 100 && !_fuelRefillLocked)
                 this.Fuel += this.FuelRefill * Time.deltaTime;
             Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, WalkPitch, Time.deltaTime);
+
+            Jetpack.volume = 0.25f;
             //_audioManager.SetJetpack(false);
         }  
 
@@ -235,10 +238,13 @@ public class PlayerMovement : MonoBehaviour
 
         speed *= Accleration;
 
-        if(speed.magnitude > Threshold)
-            Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, WalkPitch, Time.deltaTime);
-        else
-            Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, IdlePitch, Time.deltaTime);
+        if (!this._usingJetpack && !this._sprinting)
+        {
+            if (speed.magnitude > Threshold)
+                Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, WalkPitch, Time.deltaTime);
+            else
+                Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, IdlePitch, Time.deltaTime);
+        }
 
         if (this._rig.velocity.magnitude < MaxSpeed)
             this._rig.velocity += (this._sprinting? SprintBoost:1) * speed;
