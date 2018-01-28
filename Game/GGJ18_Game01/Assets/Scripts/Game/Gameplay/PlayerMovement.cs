@@ -39,12 +39,15 @@ public class PlayerMovement : MonoBehaviour
     private bool _sprinting;
     private bool _fuelLocked;
     private AudioManager _audioManager;
+    private Animator _animator;
+
     void Start()
     {
         Locator.Register(this);
         _rig = GetComponent<Rigidbody>();
         Cam = GetComponentInChildren<Camera>();
         _audioManager = GetComponent<AudioManager>();
+        this._animator = GetComponent<Animator>();
     }
 
     public void CustomUpdate()
@@ -155,6 +158,17 @@ public class PlayerMovement : MonoBehaviour
 
         if (this._rig.velocity.magnitude < MaxSpeed)
             this._rig.velocity += (this._sprinting? SprintBoost:1) * speed;
+
+        UpdateAnimator(movementInputVector.x, movementInputVector.y);
+    }
+
+    private void UpdateAnimator(float forward, float turn)
+    {
+        if(this._animator != null)
+        {
+            this._animator.SetFloat("Forward", forward);
+            this._animator.SetFloat("Turn", turn);
+        }
     }
 
     IEnumerator LockFuel()

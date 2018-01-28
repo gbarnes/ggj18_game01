@@ -19,6 +19,7 @@ public class Player : NetworkBehaviour
     public int Crystals = 0;
 
     public GameObject CameraPrefab;
+    public Material BluePlayerMaterial;
 
     private GameSimulationManager sim;
     private PlayerMovement movement;
@@ -99,6 +100,11 @@ public class Player : NetworkBehaviour
         else if (isClient) // client runs
         {
             transform.position = new Vector3(40.62504f, 90.62834f, -8.43356f);
+        }
+
+        if (!isRedPlayer && BluePlayerMaterial != null)
+        {
+            GetComponentInChildren<SkinnedMeshRenderer>().material = BluePlayerMaterial;
         }
     }
 
