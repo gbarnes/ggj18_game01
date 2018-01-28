@@ -23,6 +23,8 @@ public class PlayerMovement : MonoBehaviour
     public float FuelDrain = 1;
     public float SprintDrain = 1;
     public float FuelRefill = 1;
+    public float JetpackCooldown = 3;
+    public float FuelRefillCooldown = 1;
     public float Fuel = 100;
     public float SoundRatio;
 
@@ -37,14 +39,18 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _gravity;
     private bool _usingJetpack;
     private bool _sprinting;
-    private bool _fuelLocked;
+    private bool _fuelUsingLocked;
+    private bool _fuelRefillLocked;
     private AudioManager _audioManager;
+    private Animator _animator;
+
     void Start()
     {
         Locator.Register(this);
         _rig = GetComponent<Rigidbody>();
         Cam = GetComponentInChildren<Camera>();
         _audioManager = GetComponent<AudioManager>();
+        this._animator = GetComponent<Animator>();
     }
 
     public void CustomUpdate()
@@ -65,19 +71,19 @@ public class PlayerMovement : MonoBehaviour
             {
                 this.Fuel -= this.FuelDrain * Time.deltaTime;
                 if (this.Fuel < 0)
-                    StartCoroutine(LockFuel());
+                    StartCoroutine(LockFuelUsage());
             }
             if (_sprinting)
             {
                 this.Fuel -= this.SprintDrain * Time.deltaTime;
                 if (this.Fuel < 0)
-                    StartCoroutine(LockFuel());
+                    StartCoroutine(LockFuelUsage());
             }
             //_audioManager.SetJetpack(true);
         }
         else
         {
-            if (this.Fuel < 100)
+            if (this.Fuel < 100 && !_fuelRefillLocked)
                 this.Fuel += this.FuelRefill * Time.deltaTime;
             Jetpack.pitch = Mathf.Lerp(Jetpack.pitch, WalkPitch, Time.deltaTime);
             //_audioManager.SetJetpack(false);
@@ -86,13 +92,18 @@ public class PlayerMovement : MonoBehaviour
         if (this.Fuel > 100)
             this.Fuel = 100;
         else if (this.Fuel < 0)
+        {
             this.Fuel = 0;
+            StartCoroutine(LockFuelRefill());
+        }  
     }
 
     private void ApplyMovement()
     {
         Vector2 movementInputVector;
         Vector2 aimInputVector;
+        float up = 0;
+
         if (ControllerOn)
         {
             aimInputVector.y = Input.GetAxis("VerticalRight");
@@ -100,8 +111,9 @@ public class PlayerMovement : MonoBehaviour
 
             movementInputVector.x = Input.GetAxis("VerticalLeft");
             movementInputVector.y = Input.GetAxis("HorizontalLeft");
-            if(Mathf.Abs(Input.GetAxis("TriggerAxis"))> 0.1f && !_fuelLocked)
+            if(Mathf.Abs(Input.GetAxis("TriggerAxis"))> 0.1f && !_fuelUsingLocked)
             {
+                up = Thrust * Input.GetAxis("TriggerAxis");
                 this._rig.velocity -= _gravity * Thrust * Input.GetAxis("TriggerAxis");
                 _usingJetpack = true;
             }
@@ -117,8 +129,9 @@ public class PlayerMovement : MonoBehaviour
             movementInputVector.y = Input.GetAxis("Horizontal");
             movementInputVector.x = Input.GetAxis("Vertical");
 
-            if (Input.GetButton("Jump") && !_fuelLocked)
+            if (Input.GetButton("Jump") && !_fuelUsingLocked)
             {
+                up = Thrust;
                 this._rig.velocity -= _gravity * Thrust;
                 _usingJetpack = true;
                 //return;
@@ -129,7 +142,7 @@ public class PlayerMovement : MonoBehaviour
         if (InvertedY)
             aimInputVector.y *= -1;
 
-        _sprinting = Input.GetButton("Sprint") && !_fuelLocked;
+        _sprinting = Input.GetButton("Sprint") && !_fuelUsingLocked;
 
         Quaternion yRot = Quaternion.AngleAxis(aimInputVector.x * SensitivityY, Vector3.up);
 
@@ -155,13 +168,33 @@ public class PlayerMovement : MonoBehaviour
 
         if (this._rig.velocity.magnitude < MaxSpeed)
             this._rig.velocity += (this._sprinting? SprintBoost:1) * speed;
+       
+        UpdateAnimator(movementInputVector.x, movementInputVector.y, up);
     }
 
-    IEnumerator LockFuel()
+    private void UpdateAnimator(float forward, float turn, float up)
     {
-        _fuelLocked = true;
-        yield return new WaitForSeconds(3);
-        _fuelLocked = false;
+        if(this._animator != null)
+        {
+            this._animator.SetFloat("Forward", forward);
+            this._animator.SetFloat("Turn", turn);
+            this._animator.SetFloat("Up", up);
+        }
+    }
+
+    IEnumerator LockFuelUsage()
+    {
+        _fuelUsingLocked = true;
+        yield return new WaitForSeconds(JetpackCooldown);
+        _fuelUsingLocked = false;
+        yield return null;
+    }
+
+    IEnumerator LockFuelRefill()
+    {
+        _fuelRefillLocked = true;
+        yield return new WaitForSeconds(FuelRefillCooldown);
+        _fuelRefillLocked = false;
         yield return null;
     }
 }

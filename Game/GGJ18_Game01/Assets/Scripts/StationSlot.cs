@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using GGJ_G01.Game.Manager;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -14,17 +15,11 @@ public class StationSlot : InteractableObject
     public Animator StationAnimator;
     private void Start()
     {
-        if(!isLocalPlayer)
+        if(isServer)
         {
-            Player[] players = GameObject.FindObjectsOfType<Player>();
-            for (int i = 0; i < players.Length; i++)
-            {
-                Player player = players[i];
-                if (this.AcceptsType == ItemType.Crystal_Red && player.isRedPlayer)
-                    this.OwnerId = player.netId;
-                else if (this.AcceptsType == ItemType.Crystal_Blue && !player.isRedPlayer)
-                    this.OwnerId = player.netId;
-            }
+            CustomGameNetworkManager manager = GameObject.FindObjectOfType<CustomGameNetworkManager>();
+            if(!manager.Slots.Contains(this))
+                manager.Slots.Add(this);
         }
     }
 

@@ -15,6 +15,7 @@ namespace GGJ_G01.Game.Manager
         public bool waitForPlayers = false;
         public bool isServer = false;
         private NetworkConnection serverConnection;
+        public List<StationSlot> Slots = new List<StationSlot>();
 
         private void Start()
         {
@@ -67,7 +68,7 @@ namespace GGJ_G01.Game.Manager
         public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
         {
             //base.OnServerAddPlayer(conn, playerControllerId);
-            bool isRedplayer = (NetworkServer.connections.Count > 0);
+            bool isRedplayer = (NetworkServer.connections.Count <= 1);
 
             Vector3 blueSpawn = new Vector3(40.62504f, 90.62834f, -8.43356f);
             Vector3 redSpawn = new Vector3(-42.25265f, 90.01147f, -4.957952f);
@@ -83,6 +84,13 @@ namespace GGJ_G01.Game.Manager
             
             NetworkServer.AddPlayerForConnection(conn, NewInstanceOfPlayer, 0);
 
+            foreach(StationSlot slot in Slots)
+            {
+                if (slot.AcceptsType == ItemType.Crystal_Red && pComponent.isRedPlayer)
+                    slot.OwnerId = pComponent.netId;
+                else if (slot.AcceptsType == ItemType.Crystal_Blue && !pComponent.isRedPlayer)
+                    slot.OwnerId = pComponent.netId;
+            }
         }
 
         public override void OnServerConnect(NetworkConnection conn)
