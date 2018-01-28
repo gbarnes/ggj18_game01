@@ -165,7 +165,7 @@ public class Player : NetworkBehaviour
             if (sim.GameOver)
                 return;
 
-            //movement.CustomUpdate();
+            movement.CustomUpdate();
 
             if (Input.GetKeyDown(KeyCode.F))
             {
