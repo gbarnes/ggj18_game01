@@ -62,15 +62,19 @@ namespace GGJ_G01.Game.Manager
             }
 
         }
-
+        
 
         public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
         {
             //base.OnServerAddPlayer(conn, playerControllerId);
+            bool isRedplayer = (NetworkServer.connections.Count == 0);
 
-            GameObject NewInstanceOfPlayer = Instantiate(NetworkManager.singleton.playerPrefab, new Vector3(0.0f, 0.53f, 0.0f), Quaternion.identity) as GameObject;
+            Vector3 blueSpawn = new Vector3(40.62504f, 90.62834f, -8.43356f);
+            Vector3 redSpawn = new Vector3(-42.25265f, 90.01147f, -4.957952f);
 
-            bool isRedplayer = (NetworkServer.connections.Count == 1);
+            GameObject NewInstanceOfPlayer = Instantiate(NetworkManager.singleton.playerPrefab, (!isRedplayer) ? blueSpawn : redSpawn, Quaternion.identity) as GameObject;
+
+            
             NewInstanceOfPlayer.name = !isRedplayer ? "PlayerBlue" : "PlayerRed";
 
             Player pComponent = NewInstanceOfPlayer.GetComponent<Player>();

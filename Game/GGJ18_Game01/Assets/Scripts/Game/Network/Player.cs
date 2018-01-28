@@ -29,7 +29,7 @@ public class Player : NetworkBehaviour
 
     private void Awake()
     {
-        Locator.Register<Player>(this);
+      
     }
 
     public void ChangeCrystalsInPosession(int value)
@@ -65,6 +65,13 @@ public class Player : NetworkBehaviour
         movement = GetComponent<PlayerMovement>();
         LevelGenerator generator = Locator.Get<LevelGenerator>();
 
+        if (isLocalPlayer)
+        {
+            Locator.Register<Player>(this);
+            Debug.Log("Registered player class at locator");
+        }
+        
+
         Observer.Subscribe(CommandType.Game_HoldingItemChanged, (Action<ItemType>)OnHoldingItemChanged);
 
         if (generator != null)
@@ -72,6 +79,7 @@ public class Player : NetworkBehaviour
 
         if (isLocalPlayer)
         {
+           
             sim = Locator.Get<GameSimulationManager>();
             GameObject camera = GameObject.Instantiate(CameraPrefab, Vector3.zero, Quaternion.identity);
             camera.transform.parent = this.transform;
@@ -92,6 +100,9 @@ public class Player : NetworkBehaviour
             GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 0, 0));
         else
             GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 1, 1));
+
+        if(this.isClient)
+            this.holdingItem = item;
     }
 	
 	// Update is called once per frame
@@ -167,6 +178,7 @@ public class Player : NetworkBehaviour
                 if (tempObj is Stash)
                 {
                     Stash tempStash = (Stash)tempObj;
+
                     if (tempStash.Item == ItemType.None && this.holdingItem == ItemType.None)
                         Observer.Trigger(CommandType.UI_ShowNotification);
 
@@ -177,6 +189,7 @@ public class Player : NetworkBehaviour
                 else if(tempObj is StationSlot)
                 {
                     StationSlot tempStation = (StationSlot)tempObj;
+
                     if (!tempStation.IsFilled && this.holdingItem == ItemType.None)
                         Observer.Trigger(CommandType.UI_ShowNotification);
 

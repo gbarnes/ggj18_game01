@@ -15,7 +15,7 @@ public class UIHudComponent : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        movement = Locator.Get<PlayerMovement>();
+        //movement = Locator.Get<PlayerMovement>();
 	}
 
     // Update is called once per frame
@@ -23,7 +23,9 @@ public class UIHudComponent : MonoBehaviour {
     {
         RaycastHit hit;
         if (Camera.main == null)
+        {
             return;
+        }
 
         //Ray forwardRay = new Ray(Camera.main.transform.position, transform.forward);
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 5.0f, LayerMask.GetMask("Interaction")))
@@ -38,6 +40,12 @@ public class UIHudComponent : MonoBehaviour {
         }
 
         if(movement != null) {
+            float fuel = movement.Fuel;
+            if (fuel == 100)
+                fuelMeter.SetActive(false);
+            else
+                fuelMeter.SetActive(true);
+                    
             fuelMeter.GetComponent<Slider>().value = movement.Fuel;
         } else {
             movement = Locator.Get<PlayerMovement>();
