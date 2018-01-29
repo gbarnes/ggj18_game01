@@ -128,9 +128,9 @@ namespace AssetBundles
 			case BuildTarget.StandaloneWindows:
 			case BuildTarget.StandaloneWindows64:
 				return "/"+Application.productName+".exe";
-			case BuildTarget.StandaloneOSXIntel:
-			case BuildTarget.StandaloneOSXIntel64:
-			case BuildTarget.StandaloneOSXUniversal:
+			//case BuildTarget.StandaloneOSXIntel:
+			//case BuildTarget.StandaloneOSXIntel64:
+			case BuildTarget.StandaloneOSX:
 				return "/" + Application.productName + ".app";
 			case BuildTarget.WebGL:
 				return "";
