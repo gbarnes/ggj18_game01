@@ -5,7 +5,7 @@ AnimatorController:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Scifi_Box_01
+  m_Name: Stash_Pile_of_Stones
   serializedVersion: 5
   m_AnimatorParameters: []
   m_AnimatorLayers: []
