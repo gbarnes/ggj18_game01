@@ -207,7 +207,7 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetButton("Jump") && !_fuelUsingLocked)
             {
                 this._up = Mathf.Min(this._up + Time.deltaTime * 2, Thrust);
-                this._rig.velocity -= _gravity * Thrust;
+                this._rig.velocity -= _gravity * (Thrust);
                 _usingJetpack = true;
                 //return;
             }
@@ -265,7 +265,7 @@ public class PlayerMovement : MonoBehaviour
         if (this._rig.velocity.magnitude < MaxSpeed)
         {
             speed = Quaternion.Euler(-this.SurfaceNormal) * speed;//FromToRotation(this.SurfaceNormal, transform.up)
-            this._rig.velocity += (this._sprinting ? SprintBoost : 1) * speed;
+            this._rig.velocity += (this._sprinting ? SprintBoost : 1) * speed * Time.deltaTime;
         }
             
        

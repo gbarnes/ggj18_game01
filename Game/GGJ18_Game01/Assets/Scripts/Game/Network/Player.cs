@@ -223,7 +223,8 @@ public class Player : NetworkBehaviour
     {
         RaycastHit hit;
         //Ray forwardRay = new Ray(Camera.main.transform.position, transform.forward);
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 5.0f, LayerMask.GetMask("Interaction")))
+        float distance = 8.0f + Vector3.Distance(Camera.main.transform.position, this.transform.position);
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, distance, LayerMask.GetMask("Interaction")))
         {
             InteractableObject tempObj = hit.transform.gameObject.GetComponent<InteractableObject>();            
             

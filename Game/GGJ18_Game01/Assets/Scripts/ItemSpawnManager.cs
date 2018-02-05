@@ -51,7 +51,7 @@ public class ItemSpawnManager: NetworkBehaviour
 
             int prefabIndex = Random.Range(0, NetworkManager.singleton.spawnPrefabs.Count);            
             // instantiate prefab object (either tree, rock or anything else)
-            GameObject stash = (GameObject)Instantiate(NetworkManager.singleton.spawnPrefabs[prefabIndex], location.transform.position, location.transform.rotation);
+            GameObject stash = (GameObject)Instantiate(NetworkManager.singleton.spawnPrefabs[prefabIndex], location.transform.position + (-location.transform.up * 1.1f), location.transform.rotation);
             NetworkServer.Spawn(stash);
 
             this._stashes.Add(stash.GetComponent<Stash>());

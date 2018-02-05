@@ -10,7 +10,7 @@ using UnityEngine.Networking;
 
 namespace GGJ_G01.Game.Manager
 {
-    class CustomGameNetworkManager : NetworkManager
+    class CustomGameNetworkManager : NetworkLobbyManager
     {
         public bool waitForPlayers = false;
         public bool isServer = false;
@@ -22,6 +22,7 @@ namespace GGJ_G01.Game.Manager
             Locator.Register<CustomGameNetworkManager>(this);
             //  Observer.Subscribe(CommandType.GameSession_InitializedServer, (Action)Evt_OnHandleInitializedServer);
             this.maxConnections = 2;
+            this.StartMatchMaker();
         }
 
         /* public override void OnClientDisconnect(NetworkConnection conn)

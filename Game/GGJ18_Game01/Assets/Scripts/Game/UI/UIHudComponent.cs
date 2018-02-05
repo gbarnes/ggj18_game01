@@ -32,6 +32,7 @@ public class UIHudComponent : MonoBehaviour {
 
     private float rippleAlphaRed = 1;
     private float rippleAlphaBlue = 1;
+    
 
     // Use this for initialization
     void Start () {
@@ -98,25 +99,27 @@ public class UIHudComponent : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        RaycastHit hit;
-        if (Camera.main == null)
-        {
-            return;
-        }
-
-        //Ray forwardRay = new Ray(Camera.main.transform.position, transform.forward);
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 5.0f, LayerMask.GetMask("Interaction")))
-        {
-            reticuleDot.SetActive(false);
-            reticuleRing.SetActive(true);
-        }
-        else
-        {
-            reticuleDot.SetActive(true);
-            reticuleRing.SetActive(false);
-        }
-
         if(movement != null) {
+
+            RaycastHit hit;
+            if (Camera.main == null)
+            {
+                return;
+            }
+
+            //Ray forwardRay = new Ray(Camera.main.transform.position, transform.forward);
+            float distance = 8.0f + Vector3.Distance(Camera.main.transform.position, movement.transform.position);
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, distance, LayerMask.GetMask("Interaction")))
+            {
+                reticuleDot.SetActive(false);
+                reticuleRing.SetActive(true);
+            }
+            else
+            {
+                reticuleDot.SetActive(true);
+                reticuleRing.SetActive(false);
+            }
+
             float fuel = movement.Fuel;
             if (fuel == 100)
                 fuelMeter.SetActive(false);

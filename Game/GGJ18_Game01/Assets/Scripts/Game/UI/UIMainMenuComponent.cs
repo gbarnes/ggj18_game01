@@ -1,4 +1,5 @@
 ﻿using Framework.Service;
+using Framework.Utility;
 using GGJ_G01.Game.Manager;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,11 @@ using UnityEngine.UI;
 
 namespace GGJ_G01.Game.UI
 {
-    class UIMainMenuComponent : MonoBehaviour
+    public class UIMainMenuComponent : MonoBehaviour
     {
         public Button StartServerBtn;
         public Button StartClientBtn;
+        public Button CreateMatchBtn;
         public Button CreditBtn;
         public InputField IPAddressTxt;
         public Text ContinueText;
@@ -36,11 +38,26 @@ namespace GGJ_G01.Game.UI
                 networkManager.StartClient();
             });
 
+            CreateMatchBtn.onClick.AddListener(() =>
+            {
+                CustomGameNetworkManager networkManager = Locator.Get<CustomGameNetworkManager>();
+
+
+                networkManager.matchMaker.CreateMatch("Test", 2, false, "", "", "", 0, 0, Evt_OnMatchCreated);
+                
+            });
+
             CreditBtn.onClick.AddListener(() =>
             {
                 Observer.Trigger(CommandType.UI_OpenCredits);
             });
         }
+
+        private void Evt_OnMatchCreated(bool success, string extendedInfo, MatchInfo responseData)
+        {
+            // q
+        }
+        
 
         private void Update()
         {
