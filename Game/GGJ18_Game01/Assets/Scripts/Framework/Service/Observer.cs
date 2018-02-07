@@ -31,7 +31,10 @@ namespace Framework.Service
         UI_ShowNotification,
         UI_SignalChanged,
         UI_OpenCredits,
-        UI_HoldingItemChanged
+        UI_HoldingItemChanged,
+        UI_UsernameSet,
+        Network_EnteredLobby,
+        Network_ExitLobby
     }
 
     /// <summary>

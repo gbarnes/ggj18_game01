@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Networking.Match;
 
 namespace GGJ_G01.Game.Manager
 {
@@ -16,6 +17,7 @@ namespace GGJ_G01.Game.Manager
         public bool isServer = false;
         private NetworkConnection serverConnection;
         public List<StationSlot> Slots = new List<StationSlot>();
+       // public List<CustomLobbyPlayer> LobbyPlayers = new List<CustomLobbyPlayer>();
 
         private void Start()
         {
@@ -25,31 +27,87 @@ namespace GGJ_G01.Game.Manager
             this.StartMatchMaker();
         }
 
-        /* public override void OnClientDisconnect(NetworkConnection conn)
-         {
-             base.OnClientDisconnect(conn);
+        #region Lobby Methods
+        public void StartGame()
+        {
+            this.matchMaker.ListMatches(0, 1, "", true, 0, 0, this.OnMatchList);
+        }
+        #endregion
 
-             DLog.Log("Player disconnected from server!");
-             Observer.TriggerDelayed(CommandType.GameSession_End, 2.0f, null);
-         }
+        #region Lobby Events
+        public override void OnMatchList(bool success, string extendedInfo, List<MatchInfoSnapshot> matchList)
+        {
+            base.OnMatchList(success, extendedInfo, matchList);
 
-         private void Evt_OnHandleInitializedServer()
-         {
-             GameObject NewInstanceOfPlayer = Instantiate(NetworkManager.singleton.playerPrefab) as GameObject;
-             NewInstanceOfPlayer.name = "Player02";
-             NetworkServer.AddPlayerForConnection(serverConnection, NewInstanceOfPlayer, 0);
-         }
+            if(!success)
+            {
+                return;
+            }
+            else
+            {
+                if(matchList.Count == 0)
+                {
+                    GameSimulationManager sim = Locator.Get<GameSimulationManager>();
 
-         public override void OnClientConnect(NetworkConnection conn)
-         {
-             base.OnClientConnect(conn);
+                    // create match
+                    this.matchMaker.CreateMatch(sim.Username + "_Match", 12, true, "", "", "", 0, 0, this.OnMatchCreate);
+                }
+                else
+                {
+                    this.matchMaker.JoinMatch(matchList[0].networkId, "", "", "", 0, 0, OnMatchJoined);
+                }
+            }
 
-             if (!isServer)
-             {
-                 DLog.Log("Player connected to server!");
-                 Observer.Trigger(CommandType.GameSession_Start, conn, false);
-             } 
-         }*/
+        }
+
+        public override void OnMatchCreate(bool success, string extendedInfo, MatchInfo matchInfo)
+        {
+            base.OnMatchCreate(success, extendedInfo, matchInfo);
+            if (!success)
+            {
+                return;
+            }
+            Observer.Trigger(CommandType.Network_EnteredLobby);
+        }
+
+        public override void OnMatchJoined(bool success, string extendedInfo, MatchInfo matchInfo)
+        {
+            base.OnMatchJoined(success, extendedInfo, matchInfo);
+            if (!success)
+            {
+                return;
+            } 
+            Observer.Trigger(CommandType.Network_EnteredLobby);
+        }
+
+        public override void OnLobbyServerDisconnect(NetworkConnection conn)
+        {
+            base.OnLobbyServerDisconnect(conn);
+        }
+
+        public override void OnLobbyClientDisconnect(NetworkConnection conn)
+        {
+            base.OnLobbyClientDisconnect(conn);
+            Observer.Trigger(CommandType.Network_ExitLobby);
+        }
+        #endregion
+
+
+        #region Events
+        public override void OnServerReady(NetworkConnection conn)
+        {
+
+        }
+
+        public override void OnLobbyServerPlayersReady()
+        {
+            base.OnLobbyServerPlayersReady();
+        }
+
+        public override void OnLobbyServerConnect(NetworkConnection conn)
+        {
+            base.OnLobbyServerConnect(conn);
+        }
 
         public override void OnServerDisconnect(NetworkConnection conn)
         {
@@ -65,11 +123,14 @@ namespace GGJ_G01.Game.Manager
             }
 
         }
-        
 
-        public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
+        public override GameObject OnLobbyServerCreateLobbyPlayer(NetworkConnection conn, short playerControllerId)
         {
-            //base.OnServerAddPlayer(conn, playerControllerId);
+            return base.OnLobbyServerCreateLobbyPlayer(conn, playerControllerId);
+        }
+
+        public override GameObject OnLobbyServerCreateGamePlayer(NetworkConnection conn, short playerControllerId)
+        {
             bool isRedplayer = (NetworkServer.connections.Count <= 1);
 
             Vector3 blueSpawn = new Vector3(40.62504f, 90.62834f, -8.43356f);
@@ -77,22 +138,23 @@ namespace GGJ_G01.Game.Manager
 
             GameObject NewInstanceOfPlayer = GameObject.Instantiate(NetworkManager.singleton.playerPrefab, (!isRedplayer) ? blueSpawn : redSpawn, Quaternion.identity) as GameObject;
 
-            
+
             NewInstanceOfPlayer.name = !isRedplayer ? "PlayerBlue" : "PlayerRed";
 
             Player pComponent = NewInstanceOfPlayer.GetComponent<Player>();
             if (!isRedplayer)
                 pComponent.isRedPlayer = false;
-            
+
             NetworkServer.AddPlayerForConnection(conn, NewInstanceOfPlayer, 0);
 
-            foreach(StationSlot slot in Slots)
+            foreach (StationSlot slot in Slots)
             {
                 if (slot.AcceptsType == ItemType.Crystal_Red && pComponent.isRedPlayer)
                     slot.OwnerId = pComponent.netId;
                 else if (slot.AcceptsType == ItemType.Crystal_Blue && !pComponent.isRedPlayer)
                     slot.OwnerId = pComponent.netId;
             }
+            return NewInstanceOfPlayer;
         }
 
         public override void OnServerConnect(NetworkConnection conn)
@@ -109,17 +171,9 @@ namespace GGJ_G01.Game.Manager
             }
             else
             {
-
-
-                //manager.Pause();
-#if UNITY_STANDALONE
-                    //Time.timeScale = 0;
-         //   manager.GameOver = true;
-         //   Observer.Trigger(CommandType.GameSession_InitializedServer);
-#endif
-
                 manager.ChangeState(GameplayState.Game);
             }
         }
+        #endregion
     }
 }

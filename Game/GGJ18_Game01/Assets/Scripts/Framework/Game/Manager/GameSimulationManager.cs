@@ -30,6 +30,7 @@ namespace Framework.Game.Manager
         /// </summary>
         public GameObject PlayerPrefab;
 
+        public string Username;
         public bool GameOver = false;
         #endregion
 
