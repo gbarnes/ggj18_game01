@@ -1,6 +1,7 @@
 ﻿using Framework.Game.Manager;
 using Framework.Service;
 using Framework.Utility;
+using GGJ_G01.Assets.Scripts.Game.Network;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,15 @@ namespace GGJ_G01.Game.Manager
         public void StartGame()
         {
             this.matchMaker.ListMatches(0, 1, "", true, 0, 0, this.OnMatchList);
+        }
+
+        public void ToggleReady()
+        {
+            CustomLobbyPlayer player = Locator.Get<CustomLobbyPlayer>();
+            if (!player.readyToBegin)
+                player.SendReadyToBeginMessage();
+            else
+                player.SendNotReadyToBeginMessage();
         }
         #endregion
 
@@ -91,7 +101,7 @@ namespace GGJ_G01.Game.Manager
             Observer.Trigger(CommandType.Network_ExitLobby);
         }
         #endregion
-
+        
 
         #region Events
         public override void OnServerReady(NetworkConnection conn)
@@ -101,7 +111,7 @@ namespace GGJ_G01.Game.Manager
 
         public override void OnLobbyServerPlayersReady()
         {
-            base.OnLobbyServerPlayersReady();
+            
         }
 
         public override void OnLobbyServerConnect(NetworkConnection conn)

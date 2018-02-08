@@ -33,6 +33,8 @@ namespace Framework.Service
         UI_OpenCredits,
         UI_HoldingItemChanged,
         UI_UsernameSet,
+        UI_PlayerChangedReadyState,
+        UI_PlayerEnterLobby,
         Network_EnteredLobby,
         Network_ExitLobby
     }

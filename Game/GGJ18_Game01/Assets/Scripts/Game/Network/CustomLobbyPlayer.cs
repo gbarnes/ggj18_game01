@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 using UnityEngine.Networking;
 
 namespace GGJ_G01.Assets.Scripts.Game.Network
@@ -23,16 +24,27 @@ namespace GGJ_G01.Assets.Scripts.Game.Network
             Locator.Register<CustomLobbyPlayer>(this);
 
             this.name = Username;
+            Observer.Trigger(CommandType.UI_PlayerEnterLobby, Username, isLocalPlayer, this.readyToBegin);
         }
-        
+
+        public override void OnClientReady(bool readyState)
+        {
+            base.OnClientReady(readyState);
+            Observer.Trigger(CommandType.UI_PlayerChangedReadyState, readyState, Username, isLocalPlayer);
+        }
+
         public override void OnClientEnterLobby()
         {
             base.OnClientEnterLobby();
+
+            Observer.Trigger(CommandType.UI_PlayerEnterLobby, Username, isLocalPlayer, this.readyToBegin);
         }
 
         public override void OnStartServer()
         {
             base.OnStartServer();
+
+            //Observer.Trigger(CommandType.UI_PlayerEnterLobby, Username, isLocalPlayer, this.readyToBegin);
         }
 
         public override void OnStartClient()
