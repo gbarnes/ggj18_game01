@@ -42,6 +42,16 @@ namespace GGJ_G01.Game.Manager
             else
                 player.SendNotReadyToBeginMessage();
         }
+
+        public void StartMatch()
+        {
+            CustomLobbyPlayer player = Locator.Get<CustomLobbyPlayer>();
+            if (!player.isServer)
+                return;
+
+
+            ServerChangeScene(playScene);
+        }
         #endregion
 
         #region Lobby Events
@@ -111,7 +121,7 @@ namespace GGJ_G01.Game.Manager
 
         public override void OnLobbyServerPlayersReady()
         {
-            
+            Observer.Trigger(CommandType.UI_AllPlayersReady);
         }
 
         public override void OnLobbyServerConnect(NetworkConnection conn)
@@ -134,37 +144,44 @@ namespace GGJ_G01.Game.Manager
 
         }
 
+
         public override GameObject OnLobbyServerCreateLobbyPlayer(NetworkConnection conn, short playerControllerId)
         {
-            return base.OnLobbyServerCreateLobbyPlayer(conn, playerControllerId);
+            Debug.Log("Controller id: " + conn.connectionId);
+            bool isRedplayer = (conn.connectionId == 0) ? true : false;
+            GameObject NewInstanceOfPlayer = GameObject.Instantiate(this.lobbyPlayerPrefab.gameObject, Vector3.zero, Quaternion.identity) as GameObject;
+
+
+            NewInstanceOfPlayer.name = !isRedplayer ? "PlayerBlue" : "PlayerRed";
+            return NewInstanceOfPlayer;
         }
 
         public override GameObject OnLobbyServerCreateGamePlayer(NetworkConnection conn, short playerControllerId)
         {
-            bool isRedplayer = (NetworkServer.connections.Count <= 1);
+            Debug.Log("Controller id: " + conn.connectionId);
+            bool isRedplayer = (conn.connectionId == 0) ? true : false;
 
-            Vector3 blueSpawn = new Vector3(40.62504f, 90.62834f, -8.43356f);
-            Vector3 redSpawn = new Vector3(-42.25265f, 90.01147f, -4.957952f);
+             Vector3 blueSpawn = new Vector3(40.62504f, 90.62834f, -8.43356f);
+             Vector3 redSpawn = new Vector3(-42.25265f, 90.01147f, -4.957952f);
 
-            GameObject NewInstanceOfPlayer = GameObject.Instantiate(NetworkManager.singleton.playerPrefab, (!isRedplayer) ? blueSpawn : redSpawn, Quaternion.identity) as GameObject;
+             GameObject NewInstanceOfPlayer = GameObject.Instantiate(this.gamePlayerPrefab, (!isRedplayer) ? blueSpawn : redSpawn, Quaternion.identity) as GameObject;
 
 
-            NewInstanceOfPlayer.name = !isRedplayer ? "PlayerBlue" : "PlayerRed";
+             NewInstanceOfPlayer.name = !isRedplayer ? "PlayerBlue" : "PlayerRed";
 
-            Player pComponent = NewInstanceOfPlayer.GetComponent<Player>();
-            if (!isRedplayer)
-                pComponent.isRedPlayer = false;
+             Player pComponent = NewInstanceOfPlayer.GetComponent<Player>();
+             if (!isRedplayer)
+                 pComponent.isRedPlayer = false;
+             
 
-            NetworkServer.AddPlayerForConnection(conn, NewInstanceOfPlayer, 0);
-
-            foreach (StationSlot slot in Slots)
-            {
-                if (slot.AcceptsType == ItemType.Crystal_Red && pComponent.isRedPlayer)
-                    slot.OwnerId = pComponent.netId;
-                else if (slot.AcceptsType == ItemType.Crystal_Blue && !pComponent.isRedPlayer)
-                    slot.OwnerId = pComponent.netId;
-            }
-            return NewInstanceOfPlayer;
+             foreach (StationSlot slot in Slots)
+             {
+                 if (slot.AcceptsType == ItemType.Crystal_Red && pComponent.isRedPlayer)
+                     slot.OwnerId = pComponent.netId;
+                 else if (slot.AcceptsType == ItemType.Crystal_Blue && !pComponent.isRedPlayer)
+                     slot.OwnerId = pComponent.netId;
+             }
+             return NewInstanceOfPlayer;
         }
 
         public override void OnServerConnect(NetworkConnection conn)

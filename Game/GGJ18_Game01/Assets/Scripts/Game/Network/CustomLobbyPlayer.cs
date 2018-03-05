@@ -24,8 +24,22 @@ namespace GGJ_G01.Assets.Scripts.Game.Network
             Locator.Register<CustomLobbyPlayer>(this);
 
             this.name = Username;
+
+            if(this.isClient)
+            {
+                CmdChangeUsername(Username);
+            }
+
             Observer.Trigger(CommandType.UI_PlayerEnterLobby, Username, isLocalPlayer, this.readyToBegin);
         }
+
+        [Command]
+        public void CmdChangeUsername(string username)
+        {
+            this.Username = username;
+            Observer.Trigger(CommandType.UI_PlayerEnterLobby, Username, isLocalPlayer, this.readyToBegin);
+        }
+
 
         public override void OnClientReady(bool readyState)
         {
@@ -44,7 +58,7 @@ namespace GGJ_G01.Assets.Scripts.Game.Network
         {
             base.OnStartServer();
 
-            //Observer.Trigger(CommandType.UI_PlayerEnterLobby, Username, isLocalPlayer, this.readyToBegin);
+            Observer.Trigger(CommandType.UI_PlayerEnterLobby, Username, isLocalPlayer, this.readyToBegin);
         }
 
         public override void OnStartClient()

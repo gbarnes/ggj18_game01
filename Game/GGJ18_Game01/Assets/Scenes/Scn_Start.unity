@@ -432,6 +432,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114595160804406268, guid: 777452a15e17e64408741fd7863882a4,
+        type: 2}
+      propertyPath: lobbySlots.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4528770607955232, guid: 777452a15e17e64408741fd7863882a4, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -463,11 +468,6 @@ Prefab:
     - target: {fileID: 4528770607955232, guid: 777452a15e17e64408741fd7863882a4, type: 2}
       propertyPath: m_RootOrder
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114436382332275750, guid: 777452a15e17e64408741fd7863882a4,
-        type: 2}
-      propertyPath: Username
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 777452a15e17e64408741fd7863882a4, type: 2}

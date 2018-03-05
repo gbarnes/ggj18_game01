@@ -15,6 +15,7 @@ namespace GGJ_G01.Game.UI
         public Button ReadyButton;
         public Text LocalPlayerText;
         public Text RemotePlayerText;
+        bool allPlayersAreReady = false;
 
         void Start()
         {
@@ -29,11 +30,15 @@ namespace GGJ_G01.Game.UI
             this.ReadyButton.onClick.AddListener(() =>
             {
                 CustomGameNetworkManager network = Locator.Get<CustomGameNetworkManager>();
-                network.ToggleReady();
+                if (!allPlayersAreReady)
+                    network.ToggleReady();
+                else
+                    network.StartMatch();
             });
 
             Observer.Subscribe(CommandType.UI_PlayerChangedReadyState, (Action<bool, string, bool>)Evt_OnHandlePlayerChangedReadyState);
             Observer.Subscribe(CommandType.UI_PlayerEnterLobby, (Action<string, bool, bool>)Evt_OnHandlePlayerEnterLobby);
+            Observer.Subscribe(CommandType.UI_AllPlayersReady, (Action)Evt_OnHandleAllPlayersReady);
 
             this.RemotePlayerText.text = "";
         }
@@ -42,10 +47,17 @@ namespace GGJ_G01.Game.UI
         {
             Observer.Unsubscribe(CommandType.UI_PlayerEnterLobby, (Action<string, bool, bool>)Evt_OnHandlePlayerEnterLobby);
             Observer.Unsubscribe(CommandType.UI_PlayerChangedReadyState, (Action<bool, string, bool>)Evt_OnHandlePlayerChangedReadyState);
+            Observer.Unsubscribe(CommandType.UI_AllPlayersReady, (Action)Evt_OnHandleAllPlayersReady);
         }
 
 
         #region Events
+        private void Evt_OnHandleAllPlayersReady()
+        {
+            ReadyButton.GetComponentInChildren<Text>().text = "Start";
+            this.allPlayersAreReady = true;
+        }
+
 
         private void Evt_OnHandlePlayerEnterLobby(string username, bool isLocalPlayer, bool readyToBegin)  {
 

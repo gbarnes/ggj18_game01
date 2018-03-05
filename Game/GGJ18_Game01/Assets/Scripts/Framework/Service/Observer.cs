@@ -35,6 +35,7 @@ namespace Framework.Service
         UI_UsernameSet,
         UI_PlayerChangedReadyState,
         UI_PlayerEnterLobby,
+        UI_AllPlayersReady,
         Network_EnteredLobby,
         Network_ExitLobby
     }
